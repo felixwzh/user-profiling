@@ -25,7 +25,7 @@ def get_user_list(source_file_name,item_list):
                 if s1[i] != '':
                     user[item_list[i]] = s1[i]
 
-                user_list_all.append(user)
+            user_list_all.append(user)
         flag=1
     input.close()
 
