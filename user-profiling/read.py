@@ -123,34 +123,18 @@ def encode(item_list,user_list,*index):
             output_index.write(item+'\t'+value+'\t'+str(item_onehot_index_dict_dict[item][value])+'\n')
     output_index.close()
 
-
-
-    # # output the uservec ignore the None value
-    # output_onehot=open("data_onehot.txt","w")
-    # for user in user_list_onehot:
-        # # output label
-        # output_onehot.write(str(int(user[1]))+'\t')
-        # # output index of one
-        # for i in range(2,len(user)):
-            # if user[i]!=0.0:
-                # if i not in enc.feature_indices_:
-                    # output_onehot.write(str(i)+'\t')
-        # output_onehot.write('\n')
-    # output_onehot.close()
+    # output the uservec with None value
+    output_onehot = open("data_onehot.txt","w")
+    for user in user_list_onehot:
+        #output label
+        output_onehot.write(str(int(user[1]))+'\t')
+        #output index of one
+        for i in range(2,len(user)):
+            if user[i]!=0.0:
+                output_onehot.write(str(i)+'\t')
+        output_onehot.write('\n')
+    output_onehot.close()
     # end
-	
-     # output the uservec with None value
-     output_onehot = open("data_onehot.txt","w")
-     for user in user_list_onehot:
-         #output label
-         output_onehot.write(str(int(user[1]))+'\t')
-         #output index of one
-         for i in range(2,len(user)):
-             if user[i]!=0.0:
-                 output_onehot.write(str(i)+'\t')
-         output_onehot.write('\n')
-     output_onehot.close()
-    # # end
 
     return user_list_onehot
 #end def encode()
