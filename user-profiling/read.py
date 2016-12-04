@@ -3,6 +3,7 @@ import re
 from sklearn.preprocessing import OneHotEncoder
 
 
+
 def get_items(source_file_name):
     # get item name list from file
     input = open(source_file_name,'r')
@@ -12,6 +13,7 @@ def get_items(source_file_name):
         break
     input.close()
     return items
+#
 
 def get_user_list(source_file_name,item_list):
     #get user from file and add it to the user_list_all,which includes all the users from all the files
@@ -22,15 +24,42 @@ def get_user_list(source_file_name,item_list):
             line=line.strip('\n')
             user={}.fromkeys(item_all,'None')
             s1 = re.split('\t', line)
+            # #
+            user_flag = 0
+            for pre_user in user_list_all:
+                if 'CONS_NO' in item_list:
+                    if pre_user['CONS_NO'] == s1[item_list.index('CONS_NO')] and s1[item_list.index('CONS_NO')]!='None':
+                        CONS_NO=pre_user['CONS_NO']
+                        for i in range(0,len(s1)):
+                            if s1[i] != '':
+                                pre_user[item_list[i]] = s1[i]
+                        pre_user['CONS_NO']=CONS_NO
+                        user_flag =1
+                        break
+                if 'CONS_ID' in item_list:
+                    if pre_user['CONS_ID'] == s1[item_list.index('CONS_ID')] and s1[item_list.index('CONS_ID')]!='None' :
+                        CONS_ID=pre_user['CONS_ID']
+                        for i in range(0,len(s1)):
+                            if s1[i] != '':
+                                pre_user[item_list[i]] = s1[i]
+                        pre_user['CONS_ID']=CONS_ID
+                        user_flag = 1
+                        break
+            if user_flag==1 : continue
+
             for i in range(0,len(s1)):
                 if s1[i] != '':
                     user[item_list[i]] = s1[i]
-
+            # #
+            if user['CONS_ID']=='None':
+                user['CONS_ID']=user['CONS_NO']
+            if user['CONS_NO']=='None':
+                user['CONS_NO']=user['CONS_ID']
             user_list_all.append(user)
-        flag=1
+        else: flag=1
     input.close()
 
-
+#
 def encode(item_list,user_list,*index):
     #encode to one hot code and out put the data in one hot in "data_onehot.txt"
     user_list_new=[]
@@ -99,29 +128,29 @@ def encode(item_list,user_list,*index):
     # # output the uservec ignore the None value
     # output_onehot=open("data_onehot.txt","w")
     # for user in user_list_onehot:
-    #     # output label
-    #     output_onehot.write(str(int(user[1]))+'\t')
-    #     # output index of one
-    #     for i in range(2,len(user)):
-    #         if user[i]!=0.0:
-    #             if i not in enc.feature_indices_:
-    #                 output_onehot.write(str(i)+'\t')
-    #     output_onehot.write('\n')
+        # # output label
+        # output_onehot.write(str(int(user[1]))+'\t')
+        # # output index of one
+        # for i in range(2,len(user)):
+            # if user[i]!=0.0:
+                # if i not in enc.feature_indices_:
+                    # output_onehot.write(str(i)+'\t')
+        # output_onehot.write('\n')
     # output_onehot.close()
-    # # end
-
-    # output the uservec with None value
-    output_onehot = open("data_onehot.txt","w")
-    for user in user_list_onehot:
-        #output label
-        output_onehot.write(str(int(user[1]))+'\t')
-        #output index of one
-        for i in range(2,len(user)):
-            if user[i]!=0.0:
-                output_onehot.write(str(i)+'\t')
-        output_onehot.write('\n')
-    output_onehot.close()
     # end
+	
+     # output the uservec with None value
+     output_onehot = open("data_onehot.txt","w")
+     for user in user_list_onehot:
+         #output label
+         output_onehot.write(str(int(user[1]))+'\t')
+         #output index of one
+         for i in range(2,len(user)):
+             if user[i]!=0.0:
+                 output_onehot.write(str(i)+'\t')
+         output_onehot.write('\n')
+     output_onehot.close()
+    # # end
 
     return user_list_onehot
 #end def encode()
@@ -134,6 +163,7 @@ item_05=get_items("/nas/Workspaces/zhwang/data/train/05_c_cons_prc.tsv")
 item_06=get_items("/nas/Workspaces/zhwang/data/train/06_cont_info.tsv")
 item_07=get_items("/nas/Workspaces/zhwang/data/train/07_c_rca_cons.tsv")
 item_11=get_items("/nas/Workspaces/zhwang/data/train/11_c_meter.tsv")
+
 
 item_all = list(set(item_04+item_05+item_06+item_07+item_11+['LABEL']))
 
@@ -150,42 +180,6 @@ get_user_list("/nas/Workspaces/zhwang/data/train/11_c_meter.tsv",item_11)
 
 
 
-# solve the problem that some user only has 'CONS_NO' or 'CONS_ID'
-for user in user_list_all:
-    if user['CONS_ID']=='None':
-        user['CONS_ID']=user['CONS_NO']
-    if user['CONS_NO']=='None':
-        user['CONS_NO']=user['CONS_ID']
-
-
-#merge
-# merge users that have the same CONS_ID
-user_CONS_ID_dict={}
-for user in user_list_all:
-    if user['CONS_ID'] not in user_CONS_ID_dict:
-        user_CONS_ID_dict[user['CONS_ID']]=user
-    else:
-        for item in item_all:
-            if user_CONS_ID_dict[user['CONS_ID']][item]=='None':
-                user_CONS_ID_dict[user['CONS_ID']][item]=user[item]
-
-#merge users that have the same CONS_NO
-user_CONS_NO_dict={}
-for user in user_CONS_ID_dict.values():
-    if user['CONS_NO'] not in user_CONS_NO_dict:
-        user_CONS_NO_dict[user['CONS_NO']]=user
-    else:
-        for item in item_all:
-            if user_CONS_NO_dict[user['CONS_NO']][item]=='None':
-                user_CONS_NO_dict[user['CONS_NO']][item]=user[item]
-
-
-#get the final user_list
-user_list=[]
-for CONS_NO in user_CONS_NO_dict:
-    user_list.append(user_CONS_NO_dict[CONS_NO])
-
-
 #get label_list
 input_label = open("/nas/Workspaces/zhwang/data/train/train_label.csv","r")
 user_list_lable = []
@@ -200,7 +194,7 @@ input_label.close()
 
 
 #add label to user
-for user in user_list:
+for user in user_list_all:
     if user['CONS_NO'] in user_list_lable:
         user['LABEL'] = '1'
     else:
@@ -209,7 +203,7 @@ for user in user_list:
 
 
 #encode users
-encode(item_all,user_list,0,3,4,8,9,10,11,12,13,15,16,17,18,19,20,21,22,)
+encode(item_all,user_list_all,0,3,4,8,9,10,11,12,13,15,16,17,18,19,20,21,22,)
 # LABEL-2;APPR_OPINION-5 ;ELEC_ADDR-14; CONS_ID-1,CONS_NO-7,METER_ID-6  ignored
 
 # RCA_FLAG:0	CONS_ID:1	LABEL:2	CONS_SORT_CODE:3	TYPE_CODE:4	APPR_OPINION:5
