@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import re
 
 
@@ -26,18 +27,18 @@ def get_user_list(source_file_name,item_list):
                 if s1[i] != '':
                     user[item_list[i]] = s1[i]
 
-                user_list_all.append(user)
+            user_list_all.append(user)
         flag=1
     input.close()
 
 
 # --------------------------------------------------------------------------
 # get items from s{04.05.06.07.11}.txt,and merge them into a list :item_all
-item_04=get_items("/nas/Workspaces/zhwang/data/train/04_c_cons.tsv")
-item_05=get_items("/nas/Workspaces/zhwang/data/train/05_c_cons_prc.tsv")
-item_06=get_items("/nas/Workspaces/zhwang/data/train/06_cont_info.tsv")
-item_07=get_items("/nas/Workspaces/zhwang/data/train/07_c_rca_cons.tsv")
-item_11=get_items("/nas/Workspaces/zhwang/data/train/11_c_meter.tsv")
+item_04=get_items("/nas/Workspaces/zhwang/data/test/04_c_cons_test.tsv")
+item_05=get_items("/nas/Workspaces/zhwang/data/test/05_c_cons_prc_test.tsv")
+item_06=get_items("/nas/Workspaces/zhwang/data/test/06_cont_info_test.tsv")
+item_07=get_items("/nas/Workspaces/zhwang/data/test/07_c_rca_cons_test.tsv")
+item_11=get_items("/nas/Workspaces/zhwang/data/test/11_c_meter_test.tsv")
 
 item_all = list(set(item_04+item_05+item_06+item_07+item_11+['LABEL']))
 
@@ -46,11 +47,11 @@ user = {}.fromkeys(item_all)
 
 
 #get user from s{04.05.06.07.11}.txt and add them to user_list_all
-get_user_list("/nas/Workspaces/zhwang/data/train/04_c_cons.tsv",item_04)
-get_user_list("/nas/Workspaces/zhwang/data/train/05_c_cons_prc.tsv",item_05)
-get_user_list("/nas/Workspaces/zhwang/data/train/06_cont_info.tsv",item_06)
-get_user_list("/nas/Workspaces/zhwang/data/train/07_c_rca_cons.tsv",item_07)
-get_user_list("/nas/Workspaces/zhwang/data/train/11_c_meter.tsv",item_11)
+get_user_list("/nas/Workspaces/zhwang/data/test/04_c_cons_test.tsv",item_04)
+get_user_list("/nas/Workspaces/zhwang/data/test/05_c_cons_prc_test.tsv",item_05)
+get_user_list("/nas/Workspaces/zhwang/data/test/06_cont_info_test.tsv",item_06)
+get_user_list("/nas/Workspaces/zhwang/data/test/07_c_rca_cons_test.tsv",item_07)
+get_user_list("/nas/Workspaces/zhwang/data/test/11_c_meter_test.tsv",item_11)
 
 
 # solve the problem that some user only has 'CONS_NO' or 'CONS_ID'
