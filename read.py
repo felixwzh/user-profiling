@@ -69,9 +69,13 @@ def get_user_list(source_file_name,item_list):
             else: flag=1
         input.close()
     elif 'CONS_ID' in item_list:
+        counter=1
         input = open(source_file_name,'r')
         flag = 0
+
         for line in input:
+            if counter%1000==0:
+                print counter
             if flag != 0:
                 line=line.strip('\n')
                 user={}.fromkeys(item_all,'None')
@@ -87,7 +91,9 @@ def get_user_list(source_file_name,item_list):
                                     pre_user[item_list[i]] = s1[i]
                             pre_user['CONS_ID']=CONS_ID
                             user_flag = 1
+                            counter+=1
                             break
+
                     if user_flag==1 : continue
 
                 for i in range(0,len(s1)):
@@ -96,10 +102,10 @@ def get_user_list(source_file_name,item_list):
                 # #
                 user['CONS_NO']=user['CONS_ID']
                 CONS_ID_list[user['CONS_ID']]=1
+                counter+=1
                 user_list_all.append(user)
             else: flag=1
         input.close()
-
 #
 # def get_user_list(source_file_name,item_list):
 #     # get user from file and add it to the user_list_all,which includes all the users from all the files
