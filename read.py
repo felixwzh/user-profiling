@@ -114,13 +114,13 @@ def encode(item_list,user_list,*index):
         user_list_new.append(new_user)
 
 
-	print "start OneHotEncoder"
+    print "start OneHotEncoder"
     #onehot encode
     enc = OneHotEncoder()
     enc.fit(user_list_new)
     user_list_onehot = enc.transform(user_list_new).toarray()
     # user in user_list_onehot,user[1]==1 means this user has a label; user[0]==1,means this user dosen't have a label
-	print "OneHotEncoder end"
+    print "OneHotEncoder end"
 
 
     #build the dict of every categorical data
@@ -133,19 +133,19 @@ def encode(item_list,user_list,*index):
                 +enc.feature_indices_[i+1]
         item_onehot_index_dict_dict[encode_item[i]]=item_onehot_index_dict
 
-	print "start write item_onehot_index_dict.txt"
+    print "start write item_onehot_index_dict.txt"
     #out put this dict to "item_onehot_index_dict.txt"
     output_index=open("item_onehot_index_dict.txt","w")
     for item in item_onehot_index_dict_dict:
         for value in item_onehot_index_dict_dict[item]:
             output_index.write(item+'\t'+value+'\t'+str(item_onehot_index_dict_dict[item][value])+'\n')
     output_index.close()
-	print "end write item_onehot_index_dict.txt"
+    print "end write item_onehot_index_dict.txt"
 
 
 
     # output the uservec ignore the None value
-	print "start write data_onehot.txt"
+    print "start write data_onehot.txt"
     output_onehot=open("data_onehot.txt","w")
     for user in user_list_onehot:
         # output label
@@ -157,7 +157,9 @@ def encode(item_list,user_list,*index):
                     output_onehot.write(str(i)+'\t')
         output_onehot.write('\n')
     output_onehot.close()
-	print "end write data_onehot.txt"
+
+    print "end write data_onehot.txt"
+    return 1
     # end
     #
     # # output the uservec with None value
@@ -173,13 +175,15 @@ def encode(item_list,user_list,*index):
     # output_onehot.close()
     # # end
 
-    return user_list_onehot
 #end def encode()
 
 
 # --------------------------------------------------------------------------
 # get items from s{04.05.06.07.11}.txt,and merge them into a list :item_all
+
+print 'get item list'
 item_04=get_items("./data/train/04_c_cons.tsv")
+
 item_05=get_items("./data/train/05_c_cons_prc.tsv")
 item_06=get_items("./data/train/06_cont_info.tsv")
 item_07=get_items("./data/train/07_c_rca_cons.tsv")
