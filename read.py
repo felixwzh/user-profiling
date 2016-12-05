@@ -74,7 +74,7 @@ def get_user_list(source_file_name,item_list):
         flag = 0
 
         for line in input:
-            if counter%1000==0:
+            if counter%100==0:
                 print counter
             if flag != 0:
                 line=line.strip('\n')
