@@ -139,8 +139,8 @@ def encode(item_list,user_list,*index):
 
 # --------------------------------------------------------------------------
 # get items from s{04.05.06.07.11}.txt,and merge them into a list :item_all
-item_04=get_items("../04_c_cons_test.tsv")
-item_05=get_items("../05_c_cons_prc_test.tsv")
+item_04=get_items("../..04_c_cons_test.tsv")
+item_05=get_items("../..05_c_cons_prc_test.tsv")
 item_06=get_items("../06_cont_info_test.tsv")
 item_07=get_items("../07_c_rca_cons_test.tsv")
 item_11=get_items("../11_c_meter_test.tsv")
