@@ -139,11 +139,11 @@ def encode(item_list,user_list,*index):
 
 # --------------------------------------------------------------------------
 # get items from s{04.05.06.07.11}.txt,and merge them into a list :item_all
-item_04=get_items("../.04_c_cons_test.tsv")
-item_05=get_items("../../05_c_cons_prc_test.tsv")
-item_06=get_items("../06_cont_info_test.tsv")
-item_07=get_items("../07_c_rca_cons_test.tsv")
-item_11=get_items("../11_c_meter_test.tsv")
+item_04=get_items("./data/tranin/04_c_cons_test.tsv")
+item_05=get_items("./data/tranin/05_c_cons_prc_test.tsv")
+item_06=get_items("./data/tranin/06_cont_info_test.tsv")
+item_07=get_items("./data/tranin/07_c_rca_cons_test.tsv")
+item_11=get_items("./data/tranin/11_c_meter_test.tsv")
 
 print "item_list done!\n\n"
 item_all = list(set(item_04+item_05+item_06+item_07+item_11+['LABEL']))
@@ -154,19 +154,19 @@ user = {}.fromkeys(item_all)
 
 #get user from s{04.05.06.07.11}.txt and add them to user_list_all
 print "start get user_list in 04"
-get_user_list("../04_c_cons_test.tsv",item_04)
+get_user_list("./data/tranin/04_c_cons_test.tsv",item_04)
 
 print "start get user_list in 05"
-get_user_list("../05_c_cons_prc_test.tsv",item_05)
+get_user_list("./data/tranin/05_c_cons_prc_test.tsv",item_05)
 
 print "start get user_list in 06"
-get_user_list("../06_cont_info_test.tsv",item_06)
+get_user_list("./data/tranin/06_cont_info_test.tsv",item_06)
 
 print "start get user_list in 07"
-get_user_list("../07_c_rca_cons_test.tsv",item_07)
+get_user_list("./data/tranin/07_c_rca_cons_test.tsv",item_07)
 
 print "start get user_list in 11"
-get_user_list("../11_c_meter_test.tsv",item_11)
+get_user_list("./data/tranin/11_c_meter_test.tsv",item_11)
 
 print "user_list done"
 
@@ -212,7 +212,7 @@ for CONS_NO in user_CONS_NO_dict:
 
 #get label_list
 print "start get label_list "
-input_label = open("../train_label.csv","r")
+input_label = open("./data/tranin/train_label.csv","r")
 user_list_lable = []
 while 1:
     lines = input_label.readlines()
