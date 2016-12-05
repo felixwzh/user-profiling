@@ -19,7 +19,9 @@ def get_user_list_04(source_file_name,item_list):
     # get user from file and add it to the user_list_all,which includes all the users from all the files
     input = open(source_file_name,'r')
     flag = 0
+    counter=1
     for line in input:
+        if counter%1000==0:print counter
         if flag != 0:
             line=line.strip('\n')
             s1 = re.split('\t', line)
@@ -27,7 +29,7 @@ def get_user_list_04(source_file_name,item_list):
             for i in range(0,len(s1)):
                 if s1[i] != '':
                     user[item_list[i]] = s1[i]
-
+            counter+=1
             user_list_all.append(user)
             CONS_ID_list[user['CONS_ID']]=1
             CONS_NO_list[user['CONS_NO']]=1
