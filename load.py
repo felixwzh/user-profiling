@@ -230,11 +230,10 @@ def encode(*index):
     cons_no_dict[911]=[None,None_user]
 
     for i in index:
-        encode_item_list_list[i]=[]
-        encode_item_list_list[i].append(None)
+        encode_item_list_list[i]={}
+        encode_item_list_list[i][None]=len(encode_item_list_list[i])
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        encode_item_list_list[i].append('other')
-
+        encode_item_list_list[i]['other']=len(encode_item_list_list[i])
 
 
     print "encode index end"
@@ -244,8 +243,10 @@ def encode(*index):
         new_user=[None]*23
         for i in index:
             if user[1][i] not in encode_item_list_list[i]:
-                encode_item_list_list[i].append(user[1][i])
-            new_user[i]=encode_item_list_list[i].index(user[1][i])
+                encode_item_list_list[i][user[1][i]]=len(encode_item_list_list[i])
+            # if user[1][i] == None :
+            new_user[i]=encode_item_list_list[i][user[1][i]]
+
 
 
 
