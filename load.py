@@ -52,6 +52,7 @@ for line in input:
         cons_no_dict[cons_no]=[cons_id,user]
     flag+=1
 input.close()
+print "04 end"
 # print cons_no_dict
 
 
@@ -81,6 +82,7 @@ for line in input:
         #     cons_id_dict[cons_id]=[None,user]
     flag+=1
 input.close()
+print "05 end"
 # print cons_no_dict
 
 
@@ -111,7 +113,7 @@ for line in input:
         #     cons_no_dict[cons_no]=[None,user]
     flag+=1
 input.close()
-
+print "06 end"
 
 
 #load from 07
@@ -143,7 +145,7 @@ for line in input:
         #     cons_no_dict[cons_no]=[None,user]
     flag+=1
 input.close()
-
+print "07 end"
 
 #load from 11
 #METER_ID:0	ORG_NO:1	MEAS_BOX:2	SORT_CODE:3	TYPE_CODE:4	CONS_ID:5
@@ -174,6 +176,7 @@ for line in input:
         #     cons_id_dict[cons_id]=[None,user]
     flag+=1
 input.close()
+print "11 end"
 
 #  load label
 #get label_list
@@ -287,7 +290,7 @@ def encode(*index):
     #         del new_user[2]
     #         new_user_list.append(new_user)
 
-    print new_user_list
+    # print new_user_list
     print "new user list end"
 
     # print new_user_list[0]
@@ -326,7 +329,7 @@ def encode(*index):
                     cons_no_dict[user][2][i+1]\
                     +enc.feature_indices_[i+1]
     #
-    print
+    # print
     # print onehot_item_index_list
     # print enc.feature_indices_
     # #out put this dict to "item_onehot_index_dict.txt"
