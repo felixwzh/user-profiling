@@ -35,7 +35,9 @@ for line in input:
         if len(li[0])>0: user[1]=cons_id
         if len(li[1])>0: user[7]=cons_no
         # if len(li[2])>0: user[]=(li[2]) ADDR
-        if len(li[3])>0: user[13]=int(li[3])
+        #?????
+        # if len(li[3])>0: user[13]=int(li[3])
+        if len(li[3])>0: user[13]=li[3]
         if len(li[4])>0: user[18]=int(li[4])
         if len(li[5])>0: user[22]=int(li[5])
         if len(li[6])>0: user[19]=int(li[6])
