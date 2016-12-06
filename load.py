@@ -104,13 +104,13 @@ for line in input:
             # if len(li[1])>0: cons_no_dict[cons_no][1][5]=(li[1])
             if len(li[2])>0: cons_no_dict[cons_no][1][11]=int(li[2])
             if len(li[3])>0: cons_no_dict[cons_no][1][9]=int(li[3])
-        # else:
-        #     user=[None]*23
-        #     user[1]=cons_no
-        #     # if len(li[1])>0: user[5]=(li[1])
-        #     if len(li[2])>0: user[11]=int(li[2])
-        #     if len(li[3])>0: user[9]=int(li[3])
-        #     cons_no_dict[cons_no]=[None,user]
+        else:
+            user=[None]*23
+            user[1]=cons_no
+            # if len(li[1])>0: user[5]=(li[1])
+            if len(li[2])>0: user[11]=int(li[2])
+            if len(li[3])>0: user[9]=int(li[3])
+            cons_no_dict[cons_no]=[None,user]
     flag+=1
 input.close()
 print "06 end"
@@ -135,14 +135,14 @@ for line in input:
             if len(li[1])>0: cons_no_dict[cons_no][1][17]=int(li[1])
             if len(li[2])>0: cons_no_dict[cons_no][1][0]=int(li[2])
             if len(li[3])>0: cons_no_dict[cons_no][1][16]=int(li[3])
-        # else:
-        #     user=[None]*23
-        #     user[1]=cons_no
-        #     if len(li[1])>0: user[17]=int(li[1])
-        #     if len(li[2])>0: user[0]=int(li[2])
-        #     if len(li)==4: user[16]=int(li[2])# the li[3] may not exist
-        #     #add this to other load part?
-        #     cons_no_dict[cons_no]=[None,user]
+        else:
+            user=[None]*23
+            user[1]=cons_no
+            if len(li[1])>0: user[17]=int(li[1])
+            if len(li[2])>0: user[0]=int(li[2])
+            if len(li)==4: user[16]=int(li[2])# the li[3] may not exist
+            #add this to other load part?
+            cons_no_dict[cons_no]=[None,user]
     flag+=1
 input.close()
 print "07 end"
