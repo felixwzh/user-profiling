@@ -238,7 +238,9 @@ def encode(*index):
 
 
     print "encode index end"
+    counter=1
     for user in cons_no_dict.values():
+        if counter%1000==0 :print counter
         new_user=[None]*23
         for i in index:
             if user[1][i] not in encode_item_list_list[i]:
@@ -268,6 +270,7 @@ def encode(*index):
 
 
         # still have some problems !
+        counter+=1
         new_user_list.append(new_user)
 
 
