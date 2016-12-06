@@ -252,28 +252,35 @@ def encode(*index):
 
 
         # LABEL-2;APPR_OPINION-5 ;ELEC_ADDR-14; CONS_ID-1,CONS_NO-7,METER_ID-6  ignored
-        del new_user[14]
-        del new_user[7]
-        del new_user[6]
-        del new_user[5]
-        del new_user[2]
-        del new_user[1]
+        # del new_user[14]
+        # del new_user[7]
+        # del new_user[6]
+        # del new_user[5]
+        # del new_user[2]
+        # del new_user[1]
         user.append(new_user)#
-        if user[1][2]>0: new_user.insert(0,1)
-        else: new_user.insert(0,0)
+        # if user[1][2]>0: new_user.insert(0,1)
+        # else: new_user.insert(0,0)
 
-        del user[1][14]
-        del user[1][7]
-        del user[1][6]
-        del user[1][5]
-        del user[1][2]
-        del user[1][1]
+        # del user[1][14]
+        # del user[1][7]
+        # del user[1][6]
+        # del user[1][5]
+        # del user[1][2]
+        # del user[1][1]
 
 
         # still have some problems !
         counter+=1
         new_user_list.append(new_user)
 
+    for user in cons_no_dict.values():
+        user_onehot_index=[]
+        counter=0
+        for i in index:
+            user_onehot_index.append(user[2][i]+counter)
+            counter+=len(encode_item_list_list[i])
+        user.append(user_onehot_index) # user[3]
 
 
     # for user in cons_id_dict.values():
@@ -298,11 +305,13 @@ def encode(*index):
     print "new user list end"
 
     # print new_user_list[0]
-     #onehot encode
-    enc = OneHotEncoder()
-    enc.fit(new_user_list)
-    user_list_onehot = enc.transform(new_user_list).toarray()
+    #  #onehot encode
+    # enc = OneHotEncoder()
+    # enc.fit(new_user_list)
+    # user_list_onehot = enc.transform(new_user_list).toarray()
     # user in user_list_onehot,user[1]==1 means this user has a label; user[0]==1,means this user dosen't have a label
+
+
 
     print "one hot encode end"
 
@@ -310,28 +319,26 @@ def encode(*index):
     output_onehot = open("data_onehot.txt","w")
     for user in user_list_onehot:
         #output label
-        output_onehot.write(str(int(user[1]))+'\t')
+        if user[1][2]>0: output_onehot.write('1'+'\t')
+        else: output_onehot.write('0'+'\t')
         #output index of one
-        for i in range(2,len(user)):
-            if user[i]!=0.0:
-                output_onehot.write(str(i)+'\t')
+        for i in index:
+            output_onehot.write(user[3][i]+'\t')
         output_onehot.write('\n')
     output_onehot.close()
     # end
     print "output end"
 
     #
-    onehot_item_index_list=[None]*len(index)
-    for i in range(0,len(index)):
+    onehot_item_index_list=[None]*23
+    for i in index:
         onehot_item_index_list[i]={}
     for user in cons_no_dict:
         # print cons_no_dict[user]
-        for i in range(0,17):
+        for i in index:
             #
             if cons_no_dict[user][1][i] not in onehot_item_index_list[i]:
-                onehot_item_index_list[i][cons_no_dict[user][1][i]]=\
-                    cons_no_dict[user][2][i+1]\
-                    +enc.feature_indices_[i+1]
+                onehot_item_index_list[i][cons_no_dict[user][1][i]]=user[3][i]
     #
     # print
     # print onehot_item_index_list
@@ -343,7 +350,7 @@ def encode(*index):
     #         output_index.write(item+'\t'+value+'\t'+str(item_onehot_index_dict_dict[item][value])+'\n')
     # output_index.close()
     output_index=open("item_onehot_index_dict.txt","w")
-    for i in range(0,len(onehot_item_index_list)):
+    for i in index:
         for it in onehot_item_index_list[i]:
             output_index.write(str(i))
             output_index.write('\t')
