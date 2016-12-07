@@ -233,7 +233,9 @@ for user in cons_no_dict.values():
             output_index.write(str(onehot_index_dict_list[i][user[1][i]]))
             output_index.write(':1 ')
     output_index.write('\n')
+output_index.write('0 ')
 output_index.write(str(max_index))
+output_index.write(':0')
 output_index.write('\n')
 output_index.close()
 
