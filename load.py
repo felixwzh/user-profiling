@@ -333,7 +333,8 @@ def encode(*index):
 
 
 
-encode(0,3,4,8,9,10,11,12,13,15,16,17,18,19,20,21,22)
+encode(0,3,4,8,9,10,11,13,15,16,17,18,19,20,21,22)
+# LABEL-2;APPR_OPINION-5 ;ELEC_ADDR-14; CONS_ID-1,CONS_NO-7,METER_ID-6,MEAS_BOX-12  ignored
 
 
 
