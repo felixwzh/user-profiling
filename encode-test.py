@@ -40,7 +40,8 @@ for line in input:
         #?????
         # if len(li[3])>0: user[13]=int(li[3])
         if len(li[3])>0: user[13]=li[3]
-        if len(li[4])>0: user[18]=int(li[4])
+
+        if len(li[4])>0: user[18]=li[4]
         # if len(li[5])>0: user[22]=int(li[5])
         if len(li[5])>0: user[22]=li[5]
         if len(li[6])>0: user[19]=int(li[6])
@@ -198,7 +199,7 @@ for line in input_index:
     line=line.strip('\n')
     li = re.split('\t', line)
     ind = int(li[0])
-    if ind==13 or ind==22 or ind==12:
+    if ind==13 or ind==22 or ind==12 or ind ==18:
         if li[1]=='other':
             onehot_index_dict_list[ind]['other']=int(li[2])
         elif li[1]=='None':
