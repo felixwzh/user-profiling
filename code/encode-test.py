@@ -223,7 +223,9 @@ input_index.close()
 
 output_index=open('../data/test/test_user_onehot_index.txt',"w")
 for user in cons_no_dict.values():
+    output_index.write('0 ')
     for i in index:
+
         if user[1][i] not in onehot_index_dict_list[i]:
             output_index.write(str(onehot_index_dict_list[i]['other']))
             output_index.write(':1 ')
