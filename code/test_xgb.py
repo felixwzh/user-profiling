@@ -90,7 +90,7 @@ def split_eval(dataset=[], ratio=0.2, r_seed=233, seq_flag=False):
     eval_set = dataset[s_line:]
     return train_set, eval_set
 
-folder = "./data/"
+folder = "../data/"
 
 # transform_data(folder + 'train.yzx.txt', folder + 'train.data')
 # transform_data(folder + 'test.yzx.txt', folder + 'test.data')
@@ -119,4 +119,4 @@ num_round = 2
 bst = xgb.train(param, dtrain, num_round, evallist)
 
 # make prediction
-# preds = bst.predict(dtest)
+preds = bst.predict(dtest)
