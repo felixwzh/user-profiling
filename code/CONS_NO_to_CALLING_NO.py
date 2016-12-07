@@ -22,7 +22,7 @@ for line in input:
 input.close()
 
 
-input=open('../data/test/predict_user_cons_no.txt',"r")
+input=open('../data/test/test_to_predict.csv',"r")
 output=open('../data/test/predict_user_calling_no.txt',"w")
 flag = 0
 counter_user_has_no_calling_no=0
