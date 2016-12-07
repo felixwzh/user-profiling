@@ -48,7 +48,8 @@ for line in input:
         if len(li[7])>0: user[15]=int(li[7])
         if len(li[8])>0: user[10]=int(li[8])
         if len(li[9])>0: user[17]=int(li[9])
-        if len(li[10])>0: user[3]=int(li[10])
+        # if len(li[10])>0: user[3]=int(li[10])
+        if len(li[10])>0: user[3]=li[10]
         if len(li[11])>0: user[20]=int(li[11])
 
         cons_id_dict[cons_id]=[cons_no,user]
@@ -199,7 +200,7 @@ for line in input_index:
     line=line.strip('\n')
     li = re.split('\t', line)
     ind = int(li[0])
-    if ind==13 or ind==22 or ind==12 or ind ==18:
+    if ind==13 or ind==22 or ind==12 or ind ==18 or ind ==3:
         if li[1]=='other':
             onehot_index_dict_list[ind]['other']=int(li[2])
         elif li[1]=='None':
