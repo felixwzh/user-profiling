@@ -90,14 +90,17 @@ def split_eval(dataset=[], ratio=0.2, r_seed=233, seq_flag=False):
     eval_set = dataset[s_line:]
     return train_set, eval_set
 
-folder = "./ipinyou/2821/"
+folder = "./data/"
 
-transform_data(folder + 'train.yzx.txt', folder + 'train.data')
-transform_data(folder + 'test.yzx.txt', folder + 'test.data')
+# transform_data(folder + 'train.yzx.txt', folder + 'train.data')
+# transform_data(folder + 'test.yzx.txt', folder + 'test.data')
 
 # read in data
-dtrain = xgb.DMatrix(folder + 'train.data')
-dtest = xgb.DMatrix(folder + 'test.data')
+# dtrain = xgb.DMatrix(folder + 'train.data')
+# dtest = xgb.DMatrix(folder + 'test.data')
+
+dtrain = xgb.DMatrix(folder + 'train/train_user_onehot_index.txt')
+dtest = xgb.DMatrix(folder + 'test/test_user_onehot_index.txt')
 
 print dtrain.num_col()
 print dtrain.num_row()
