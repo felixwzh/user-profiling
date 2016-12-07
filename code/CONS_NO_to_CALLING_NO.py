@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import re
+import codecs
 
 
 cons_no_dict={}
@@ -23,7 +24,7 @@ input.close()
 
 
 input=open('../data/test/test_to_predict.csv',"r")
-output=open('../data/test/predict_user_calling_no.txt',"w")
+output=codecs.open('../data/test/predict_user_calling_no.txt', 'w', 'utf-8')
 flag = 0
 counter_user_has_no_calling_no=0
 counter_user_has_one_calling_no=0
@@ -33,8 +34,8 @@ for line in input:
     line=line.strip('\n')
     if int(line) in cons_no_dict:
         for no in cons_no_dict[int(line)]:
-            output.write(str(no))
-            output.write('\n')
+            output.write(str(no).decode('utf-8'))
+            output.write('\n'.decode('utf-8'))
         if len(cons_no_dict[int(line)])==1:counter_user_has_one_calling_no+=1
         else :counter_user_has_many_calling_no+=1
     else: counter_user_has_no_calling_no+=1
