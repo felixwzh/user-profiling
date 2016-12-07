@@ -226,10 +226,10 @@ for user in cons_no_dict.values():
     for i in index:
         if user[1][i] not in onehot_index_dict_list[i]:
             output_index.write(str(onehot_index_dict_list[i]['other']))
-            output_index.write(' ')
+            output_index.write(':1 ')
         elif user[1][i]!=None:
             output_index.write(str(onehot_index_dict_list[i][user[1][i]]))
-            output_index.write(' ')
+            output_index.write(':1 ')
     output_index.write('\n')
 output_index.write(str(max_index))
 output_index.write('\n')

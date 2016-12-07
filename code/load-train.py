@@ -280,7 +280,7 @@ def encode(*index):
         for i in index:
             if user[2][i]!=1:
                 output_onehot.write(str(user[3][i]))
-                output_onehot.write(" ")
+                output_onehot.write(":1 ")
         output_onehot.write('\n')
     output_onehot.close()
     # end
