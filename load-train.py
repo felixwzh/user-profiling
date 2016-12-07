@@ -272,15 +272,15 @@ def encode(*index):
         #output label
         if user[1][2]>0:
             output_onehot.write("1")
-            output_onehot.write("\t")
+            output_onehot.write(" ")
         else:
             output_onehot.write("0")
-            output_onehot.write("\t")
+            output_onehot.write(" ")
         #output index of one
         for i in index:
             if user[2][i]!=1:
                 output_onehot.write(str(user[3][i]))
-                output_onehot.write("\t")
+                output_onehot.write(" ")
         output_onehot.write('\n')
     output_onehot.close()
     # end
@@ -295,9 +295,9 @@ def encode(*index):
     for i in index:
         for values in encode_item_list_list[i]:
             output_index.write(str(i))
-            output_index.write('\t')
+            output_index.write(' ')
             output_index.write(str(values))
-            output_index.write('\t')
+            output_index.write(' ')
             output_index.write(str(encode_item_list_list[i][values]+1+counter))
             output_index.write('\n')
         counter=item_size_list[i]+counter
