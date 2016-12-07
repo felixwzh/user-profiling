@@ -196,11 +196,12 @@ onehot_index_dict_list=[None]*23
 for i in index:
     onehot_index_dict_list[i]={}
 
-
+max_index=0
 for line in input_index:
     line=line.strip('\n')
-    li = re.split('\t', line)
+    li = re.split(' ', line)
     ind = int(li[0])
+    if int(li[2])>max_index:max_index=int(li[2])
     if ind==13 or ind==22 or ind==12 or ind ==18 or ind ==3:
         if li[1]=='other':
             onehot_index_dict_list[ind]['other']=int(li[2])
@@ -216,7 +217,6 @@ for line in input_index:
         else:
             onehot_index_dict_list[ind][int(li[1])]=int(li[2])
 
-
 input_index.close()
 
 
@@ -226,11 +226,13 @@ for user in cons_no_dict.values():
     for i in index:
         if user[1][i] not in onehot_index_dict_list[i]:
             output_index.write(str(onehot_index_dict_list[i]['other']))
-            output_index.write('\t')
+            output_index.write(' ')
         elif user[1][i]!=None:
             output_index.write(str(onehot_index_dict_list[i][user[1][i]]))
-            output_index.write('\t')
+            output_index.write(' ')
     output_index.write('\n')
+output_index.write(str(max_index))
+output_index.write('\n')
 output_index.close()
 
 
