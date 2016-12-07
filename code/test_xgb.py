@@ -71,6 +71,9 @@ def read_data_np(in_path):
     return data_array
 
 
+def count_thr(arr, thr):
+    pass
+
 @tools.deprecated
 def split_eval(dataset=[], ratio=0.2, r_seed=233, seq_flag=False):
     """
@@ -115,8 +118,24 @@ print dtest.num_row()
 param = {'max_depth': 2, 'eta': 1, 'silent': 1, 'objective': 'binary:logistic'}
 watchlist = [(dtrain, 'train'), (dtest, 'eval')]
 evallist  = [(dtrain, 'eval'), (dtrain, 'train')]
-num_round = 2
+num_round = 1
 bst = xgb.train(param, dtrain, num_round, evallist)
 
 # make prediction
-preds = bst.predict(dtest)
+preds = bst.predict(dtest, ntree_limit=bst.best_iteration)
+print type(preds)
+print preds.max()
+print preds.mean()
+print len(preds)
+
+thr = 0.170
+fo = open(folder + 'test/preds_result.txt', 'w')
+count = 0
+for val in preds:
+    if val > 0.169:
+        count = count + 1
+        fo.write('1\n')
+    else:
+        fo.write('0\n')
+fo.close()
+print count
