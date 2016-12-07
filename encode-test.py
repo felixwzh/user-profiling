@@ -164,12 +164,13 @@ for line in input:
     if flag != 0:
         line=line.strip('\n')
         li = re.split('\t', line)
-        if len(li[5])>0: cons_id=int(li[5])
-        if cons_id in cons_id_dict:
-            if len(li[1])>0: cons_id_dict[cons_id][1][17]=int(li[1])
-            if len(li[2])>0: cons_id_dict[cons_id][1][12]=li[2] # int(021937631X) invalid
-            if len(li[3])>0: cons_id_dict[cons_id][1][21]=int(li[3])
-            if len(li[4])>0: cons_id_dict[cons_id][1][4]=int(li[4])
+        if len(li)==6:
+            if len(li[5])>0: cons_id=int(li[5])
+            if cons_id in cons_id_dict:
+                if len(li[1])>0: cons_id_dict[cons_id][1][17]=int(li[1])
+                if len(li[2])>0: cons_id_dict[cons_id][1][12]=li[2] # int(021937631X) invalid
+                if len(li[3])>0: cons_id_dict[cons_id][1][21]=int(li[3])
+                if len(li[4])>0: cons_id_dict[cons_id][1][4]=int(li[4])
         # else:
         #     user=[None]*23
         #     user[1]=cons_id
