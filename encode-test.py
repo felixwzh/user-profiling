@@ -215,7 +215,7 @@ for line in input_index:
             onehot_index_dict_list[ind][None]=int(li[2])
         else:
             onehot_index_dict_list[ind][int(li[1])]=int(li[2])
-print onehot_index_dict_list
+
 
 input_index.close()
 
