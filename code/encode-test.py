@@ -31,29 +31,30 @@ for line in input:
     if flag != 0:
         line=line.strip('\n')
         li = re.split('\t', line)
-        user=[None]*23
-        cons_id=int(li[0])
-        cons_no=int(li[1])
-        if len(li[0])>0: user[1]=cons_id
-        if len(li[1])>0: user[7]=cons_no
-        # if len(li[2])>0: user[]=(li[2]) ADDR
-        #?????
-        # if len(li[3])>0: user[13]=int(li[3])
-        if len(li[3])>0: user[13]=li[3]
+        if len(li)==12:
+            user=[None]*23
+            cons_id=int(li[0])
+            cons_no=int(li[1])
+            if len(li[0])>0: user[1]=cons_id
+            if len(li[1])>0: user[7]=cons_no
+            # if len(li[2])>0: user[]=(li[2]) ADDR
+            #?????
+            # if len(li[3])>0: user[13]=int(li[3])
+            if len(li[3])>0: user[13]=li[3]
 
-        if len(li[4])>0: user[18]=li[4]
-        # if len(li[5])>0: user[22]=int(li[5])
-        if len(li[5])>0: user[22]=li[5]
-        if len(li[6])>0: user[19]=int(li[6])
-        if len(li[7])>0: user[15]=int(li[7])
-        if len(li[8])>0: user[10]=int(li[8])
-        if len(li[9])>0: user[17]=int(li[9])
-        # if len(li[10])>0: user[3]=int(li[10])
-        if len(li[10])>0: user[3]=li[10]
-        if len(li[11])>0: user[20]=int(li[11])
+            if len(li[4])>0: user[18]=li[4]
+            # if len(li[5])>0: user[22]=int(li[5])
+            if len(li[5])>0: user[22]=li[5]
+            if len(li[6])>0: user[19]=int(li[6])
+            if len(li[7])>0: user[15]=int(li[7])
+            if len(li[8])>0: user[10]=int(li[8])
+            if len(li[9])>0: user[17]=int(li[9])
+            # if len(li[10])>0: user[3]=int(li[10])
+            if len(li[10])>0: user[3]=li[10]
+            if len(li[11])>0: user[20]=int(li[11])
 
-        cons_id_dict[cons_id]=[cons_no,user]
-        cons_no_dict[cons_no]=[cons_id,user]
+            cons_id_dict[cons_id]=[cons_no,user]
+            cons_no_dict[cons_no]=[cons_id,user]
     flag+=1
 input.close()
 print "04 end"
@@ -74,16 +75,17 @@ for line in input:
     if flag != 0:
         line=line.strip('\n')
         li = re.split('\t', line)
-        cons_id=int(li[0])
-        if cons_id in cons_id_dict:
-            if len(li[1])>0: cons_id_dict[cons_id][1][8]=int(li[1])
-            if len(li[2])>0: cons_id_dict[cons_id][1][17]=int(li[2])
-        # else:
-        #     user=[None]*23
-        #     user[1]=cons_id
-        #     if len(li[1])>0: user[8]=int(li[1])
-        #     if len(li[2])>0: user[17]=int(li[2])
-        #     cons_id_dict[cons_id]=[None,user]
+        if len(li)==3:
+            cons_id=int(li[0])
+            if cons_id in cons_id_dict:
+                if len(li[1])>0: cons_id_dict[cons_id][1][8]=int(li[1])
+                if len(li[2])>0: cons_id_dict[cons_id][1][17]=int(li[2])
+            # else:
+            #     user=[None]*23
+            #     user[1]=cons_id
+            #     if len(li[1])>0: user[8]=int(li[1])
+            #     if len(li[2])>0: user[17]=int(li[2])
+            #     cons_id_dict[cons_id]=[None,user]
     flag+=1
 input.close()
 print "05 end"
@@ -103,18 +105,19 @@ for line in input:
     if flag != 0:
         line=line.strip('\n')
         li = re.split('\t', line)
-        cons_no=int(li[0])
-        if cons_no in cons_no_dict:
-            # if len(li[1])>0: cons_no_dict[cons_no][1][5]=(li[1])
-            if len(li[2])>0: cons_no_dict[cons_no][1][11]=int(li[2])
-            if len(li[3])>0: cons_no_dict[cons_no][1][9]=int(li[3])
-        else:
-            user=[None]*23
-            user[1]=cons_no
-            # if len(li[1])>0: user[5]=(li[1])
-            if len(li[2])>0: user[11]=int(li[2])
-            if len(li[3])>0: user[9]=int(li[3])
-            cons_no_dict[cons_no]=[None,user]
+        if len(li)==4:
+            cons_no=int(li[0])
+            if cons_no in cons_no_dict:
+                # if len(li[1])>0: cons_no_dict[cons_no][1][5]=(li[1])
+                if len(li[2])>0: cons_no_dict[cons_no][1][11]=int(li[2])
+                if len(li[3])>0: cons_no_dict[cons_no][1][9]=int(li[3])
+            else:
+                user=[None]*23
+                user[1]=cons_no
+                # if len(li[1])>0: user[5]=(li[1])
+                if len(li[2])>0: user[11]=int(li[2])
+                if len(li[3])>0: user[9]=int(li[3])
+                cons_no_dict[cons_no]=[None,user]
     flag+=1
 input.close()
 print "06 end"
@@ -134,19 +137,20 @@ for line in input:
     if flag != 0:
         line=line.strip('\n')
         li = re.split('\t', line)
-        cons_no=int(li[0])
-        if cons_no in cons_no_dict:
-            if len(li[1])>0: cons_no_dict[cons_no][1][17]=int(li[1])
-            if len(li[2])>0: cons_no_dict[cons_no][1][0]=int(li[2])
-            if len(li[3])>0: cons_no_dict[cons_no][1][16]=int(li[3])
-        else:
-            user=[None]*23
-            user[1]=cons_no
-            if len(li[1])>0: user[17]=int(li[1])
-            if len(li[2])>0: user[0]=int(li[2])
-            if len(li)==4: user[16]=int(li[2])# the li[3] may not exist
-            #add this to other load part?
-            cons_no_dict[cons_no]=[None,user]
+        if len(li)==4:
+            cons_no=int(li[0])
+            if cons_no in cons_no_dict:
+                if len(li[1])>0: cons_no_dict[cons_no][1][17]=int(li[1])
+                if len(li[2])>0: cons_no_dict[cons_no][1][0]=int(li[2])
+                if len(li[3])>0: cons_no_dict[cons_no][1][16]=int(li[3])
+            else:
+                user=[None]*23
+                user[1]=cons_no
+                if len(li[1])>0: user[17]=int(li[1])
+                if len(li[2])>0: user[0]=int(li[2])
+                if len(li[3])>0: user[16]=int(li[3])# the li[3] may not exist
+                #add this to other load part?
+                cons_no_dict[cons_no]=[None,user]
     flag+=1
 input.close()
 print "07 end"
