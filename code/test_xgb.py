@@ -247,11 +247,14 @@ def get_pos_index(preds, thr):
 
 # 0. INITIALIZATION
 if len(sys.argv) < 2:
-    print "python test_xgb.py debug(1/0)"
+    print "python test_xgb.py debug(1/0) refresh_model(1/0) test_to_predict_file_name"
     exit(-1)
 debug = True if int(sys.argv[1]) > 0 else False
+refresh_flag = False
 if len(sys.argv) > 2:
-    pred_file = sys.argv[2]
+    refresh_flag = True if int(sys.argv[2]) > 0 else False
+if len(sys.argv) > 3:
+    pred_file = sys.argv[3]
 
 
 
@@ -326,7 +329,7 @@ param = {
 num_round = 10
 evallist  = [(dtrain, 'train'), (deval, 'eval')]
 model_file = folder + 'xgb.model'
-if os.path.exists(model_file) and os.path.isfile(model_file):
+if not refresh_flag and os.path.exists(model_file) and os.path.isfile(model_file):
     bst = xgb.Booster({'nthread':4}) #init model
     bst.load_model(model_file) # load data
 else:
@@ -354,6 +357,7 @@ print "precision\t" + `precision`
 print "recall\t" + `recall`
 
 
+# TODO add thr searching method.
 
 
 
