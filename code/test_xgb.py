@@ -45,7 +45,7 @@ def transform_data(in_path, out_path):
         li = in_line.split()
         lo = del_element(li, (1, 3)) # remove [1] market price and [2] bias items.
         out_line = ' '.join(lo)
-        fo.write(out_line+'\n')
+        fo.write(out_line+'\n') # since trans from list, so '\n' is needed.
     fi.close()
     fo.close()
     print "Transformed " + in_path
@@ -106,7 +106,7 @@ def save_data_list(dataset, out_path):
         print "WARNING: may override the existed data."
     fo = open(out_path, 'w')
     for line in dataset:
-        fo.write(line + '\n')
+        fo.write(line)
     fo.close()
     print "Saved " + out_path
 
@@ -242,12 +242,20 @@ def get_pos_index(preds, thr):
     return prefer_index
 
 
+
+
+
+# 0. INITIALIZATION
 if len(sys.argv) < 2:
     print "python test_xgb.py debug(1/0)"
     exit(-1)
 debug = True if int(sys.argv[1]) > 0 else False
 if len(sys.argv) > 2:
     pred_file = sys.argv[2]
+
+
+
+
 
 # 1. LOAD part
 folder = "../ipinyou/1458/" if debug else "../data/"
@@ -294,6 +302,8 @@ else:
 
 
 
+
+
 # 2. TRAIN part
 base_score = array_pos_ratio(dtrain_full.get_label()) # calculated from full train or sub train?
 print "base_score: " + `base_score`
@@ -315,14 +325,24 @@ param = {
         }
 num_round = 10
 evallist  = [(dtrain, 'train'), (deval, 'eval')]
-bst = xgb.train(param, dtrain, num_round, evallist)
+model_file = folder + 'xgb.model'
+if os.path.exists(model_file) and os.path.isfile(model_file):
+    bst = xgb.Booster({'nthread':4}) #init model
+    bst.load_model(model_file) # load data
+else:
+    bst = xgb.train(param, dtrain, num_round, evallist)
+    bst.save_model(folder + 'xgb.model')
 
 # make prediction
-preds = bst.predict(dtest, ntree_limit=bst.best_iteration)
+preds = bst.predict(dtest)#, ntree_limit=bst.best_iteration)
 print "max " + `preds.max()`
 print "meam " + `preds.mean()`
 print "len " + `len(preds)`
 print "pos: " + `1.0 * count_positive(preds, base_score) / len(preds)`
+
+
+
+
 
 
 thr = base_score
@@ -335,10 +355,12 @@ print "recall\t" + `recall`
 
 
 
+
+
 # 4. PREDICT part
 if not debug:
     pred_users = read_data_list(folder + pred_file)
-    preds = bst.predict(dpredict, ntree_limit=bst.best_iteration)
+    preds = bst.predict(dpredict)#, ntree_limit=bst.best_iteration)
     sorted_index = np.argsort(-preds)
     cut_line = int(len(preds)*thr)
     print "cut_line: " + `cut_line`
