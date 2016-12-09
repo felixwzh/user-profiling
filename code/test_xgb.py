@@ -1,4 +1,5 @@
 import os
+import sys
 import random
 import numpy as np
 import xgboost as xgb
@@ -8,7 +9,7 @@ import tools
 def count_positive(li, thr):
     count = 0
     for i in li:
-        if i > thr - 1E-10:
+        if i > thr - 1E-11:
             count = count + 1
     return count
 
@@ -174,28 +175,96 @@ def array_pos_ratio(dataset=np.array([])):
     ratio = 1.0 * np.count_nonzero(dataset) / len(dataset)
     return ratio
 
-# folder = "../data/"
-folder = "../ipinyou/1458/"
 
-if not os.path.exists(folder + 'train.data'):
-    transform_data(folder + 'train.yzx.txt', folder + 'train.data')
-    shuffle_data(folder + 'train.data', folder + 'train.data')
-else:
-    print "Found " + folder + 'train.data'
-if not os.path.exists(folder + 'test.data'):
-    transform_data(folder + 'test.yzx.txt', folder + 'test.data')
-else:
-    print "Found " + folder + 'test.data'
+def f1_score_by_abs_score(labels, preds, thr):
+    tp = 0
+    tn = 0
+    fp = 0
+    fn = 0
+    for i in range(len(labels)):
+        label = labels[i]
+        prob = preds[i]
+        if label > 0.5: # true
+            if prob > thr - 1E-11: # positive
+                tp = tp + 1
+            else: # negative
+                tn = tn + 1
+        else: # false
+            if prob > thr - 1E-11: # positive
+                fp = fp + 1
+            else: # negative
+                fn = fn + 1
+    precision = 1.0 * tp / (tp + fp)
+    recall = 1.0 * tp / (tp + fn)
+    f1_score = 2.0 * precision * recall / (precision + recall) if precision > 0 or recall > 0 else 0.0
+    return f1_score, precision, recall, tp, tn, fp, fn
 
-# train_data = read_data_list(folder + 'train.data')
-# # process training data
-# train_set, eval_set = list_split_eval(train_data); del train_data
-# save_data_list(train_set, folder + 'training.data')
-# save_data_list(eval_set, folder + 'eval.data')
-# # TODO: negative downsampling
-# done
+
+def f1_score_by_sort(labels, preds, thr):
+    tp = 0
+    tn = 0
+    fp = 0
+    fn = 0
+    # results = zip(range(len(preds)), preds)
+    # sort by value
+    # s_keys = [k for (k,v) in sorted(results.items(), key=operator.itemgetter(1), reverse=True)]
+    sorted_index = np.argsort(-preds)
+    cut_line = int(len(preds)*thr)
+    print "cut_line: " + `cut_line`
+    prefer_index = sorted_index[:cut_line]
+    # print prefer_index
+    hate_index = sorted_index[cut_line:]
+    # raw_input()
+    # count
+    for idx in sorted_index:
+        # print `preds[idx]` + '\t' + `labels[idx]`
+        if idx < cut_line: # positive
+            # print labels[idx]
+            if labels[idx] > 0.5: # true    
+                tp = tp + 1
+            else: # false
+                fp = fp + 1
+        else: # negative
+            if labels[idx] > 0.5: # true
+                tn = tn + 1
+            else: # false
+                fn = fn + 1
+    precision = 1.0 * tp / (tp + fp)
+    recall = 1.0 * tp / (tp + fn)
+    f1_score = 2.0 * precision * recall / (precision + recall) if precision > 0 or recall > 0 else 0.0
+    return f1_score, precision, recall, tp, tn, fp, fn
 
 
+def get_pos_index(preds, thr):
+    sorted_index = np.argsort(-preds)
+    cut_line = int(len(preds)*thr)
+    prefer_index = sorted_index[:cut_line]
+    return prefer_index
+
+
+if len(sys.argv) < 2:
+    print "python test_xgb.py debug(1/0)"
+    exit(-1)
+debug = True if int(sys.argv[1]) > 0 else False
+if len(sys.argv) > 2:
+    pred_file = sys.argv[2]
+
+# 1. LOAD part
+folder = "../ipinyou/1458/" if debug else "../data/"
+
+# iPinYou
+if debug:
+    if not os.path.exists(folder + 'train.data'):
+        transform_data(folder + 'train.yzx.txt', folder + 'train.data')
+        shuffle_data(folder + 'train.data', folder + 'train.data')
+    else:
+        print "Found " + folder + 'train.data'
+    if not os.path.exists(folder + 'test.data'):
+        transform_data(folder + 'test.yzx.txt', folder + 'test.data')
+    else:
+        print "Found " + folder + 'test.data'
+
+# Power sensitive
 while True:
     # read in data
     dtrain_full = xgb.DMatrix(folder + 'train.data')
@@ -216,10 +285,18 @@ print dtest.num_row()
 print dtest.num_col()
 
 # shuffle & split evaluation data
-dtrain, deval = dmatrix_gen_eval(dtrain_full)
+if debug:
+    dtrain, deval = dmatrix_gen_eval(dtrain_full)
+else:
+    dtrain, deval = dmatrix_gen_eval(dtrain_full, ratio=0.4) # 0.6 + 0.4
+    dpredict = dtest.slice(range(dtest.num_row()-1))
+    deval, dtest = dmatrix_gen_eval(deval, ratio=0.5) # 0.2 + 0.2
 
-# specify parameters via map
-base_score = array_pos_ratio(dtrain.get_label()) # calculated from full train or sub train?
+
+
+# 2. TRAIN part
+base_score = array_pos_ratio(dtrain_full.get_label()) # calculated from full train or sub train?
+print "base_score: " + `base_score`
 param = {   
             'early_stopping_rounds': 2,
             'base_score': base_score,
@@ -230,9 +307,9 @@ param = {
             'max_depth': 20,
             'silent': 0, 
             'scale_pos_weight': 0.7,
-            'objective': 'binary:logistic',
             'eval_metric': 'auc',
             # 'eval_metric': 'error',
+            'objective': 'binary:logistic',
             # 'objective':'multi:softmax', 'num_class':2,
             'nthread':4
         }
@@ -247,14 +324,27 @@ print "meam " + `preds.mean()`
 print "len " + `len(preds)`
 print "pos: " + `1.0 * count_positive(preds, base_score) / len(preds)`
 
-# TEST part
-# thr = 0.170
-# count = 0
-# for val in preds:
-#     if val > 0.45:
-#         count = count + 1
-# print `count` + ' in ' + `len(preds)` + ' is positive.'
 
+thr = base_score
+# 3. TEST part
+# f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_abs_score(dtest.get_label(), preds, thr)
+f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_sort(dtest.get_label(), preds, thr)
+print "f1_score\t" + `f1_score`
+print "precision\t" + `precision`
+print "recall\t" + `recall`
+
+
+
+# 4. PREDICT part
+if not debug:
+    pred_users = read_data_list(folder + pred_file)
+    preds = bst.predict(dpredict, ntree_limit=bst.best_iteration)
+    sorted_index = np.argsort(-preds)
+    cut_line = int(len(preds)*thr)
+    print "cut_line: " + `cut_line`
+    prefer_index = sorted_index[:cut_line]
+    prefer_users = [pred_users[idx] for idx in prefer_index]
+    save_data_list(prefer_users, folder + 'sens_user.txt')
 
 # xgb <- xgboost(data = data.matrix(X[,-1]), 
 #  label = y, 

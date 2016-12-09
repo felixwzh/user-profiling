@@ -17,7 +17,7 @@ def simplify_file(file_path, line_num):
 		fo = open(fo_path, 'w')
 		counter = 0
 		for line in fi:
-			fo.write(line + '\n')
+			fo.write(line)
 			counter = counter + 1
 			if counter > line_num:
 				break;
