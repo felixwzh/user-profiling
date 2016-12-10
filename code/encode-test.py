@@ -433,24 +433,24 @@ print "new user list end"
 # creat a dict to link 01 and 02
 # APP_NO:0	HANDLE_ID:1	COMM_NO:2	REQ_BEGIN_DATE:3
 # REQ_FINISH_DATE:4	ORG_NO:5	BUSI_TYPE_CODE:6	WKST_BUSI_TYPE_CODE:7
-# comm_95598_dict={}
-# index_02=[0,1,2,3,4,5,6,7]
-# input=open('../data/test/02_s_comm_rec_test.tsv',"r")
-#
-# flag = 0
-# for line in input:
-#     if flag != 0:
-#         line=line.strip('\n')
-#         li = re.split('\t', line)
-#         if len(li)==8:
-#             if len(li[0])>0:
-#                 app_no=int(li[0])
-#                 comm_95598_dict[app_no]=[None]*8
-#                 for i in index_02:
-#                     if len(li[i])>0: comm_95598_dict[app_no][i]=li[i]
-#     flag+=1
-# input.close()
-# print "01 end"
+comm_95598_dict={}
+index_02=[0,1,2,3,4,5,6,7]
+input=open('../data/test/02_s_comm_rec_test.tsv',"r")
+
+flag = 0
+for line in input:
+    if flag != 0:
+        line=line.strip('\n')
+        li = re.split('\t', line)
+        if len(li)==8:
+            if len(li[0])>0:
+                app_no=int(li[0])
+                comm_95598_dict[app_no]=[None]*8
+                for i in index_02:
+                    if len(li[i])>0: comm_95598_dict[app_no][i]=li[i]
+    flag+=1
+input.close()
+print "01 end"
 
 
 
@@ -491,6 +491,8 @@ if len(index_01)>0:
                     user_info_list[1][7]=cons_no
                     user_info_list[4].append(event_01)
                     cons_no_dict[cons_no]=user_info_list
+                if int(li[0]) in comm_95598_dict:
+                    cons_no_dict[cons_no][5].append(comm_95598_dict[int(li[0])])
         flag+=1
     input.close()
 print "01 end"
@@ -514,35 +516,35 @@ print "01 end"
 # OVERSEE_RESON:4	OVERSEE_CONTENT:5	OVERSEE_APP_NO:6
 # ORG_OR_DEPT:7	APP_BUSI_TYPE_CODE:8	ORG_NO:9
 # index_03=[0,1,2,3,4,5,6,7,8,9]
-# index_03=[2]
-#
-# input=open('../data/test/03_s_info_oversee_test.tsv',"r")
-# event_03=[None]*10
-# flag = 0
-# if len(index_03)>0:
-#     for line in input:
-#         if flag != 0:
-#             line=line.strip('\n')
-#             li = re.split('\t', line)
-#             if len(li)==10 and len(li[2])>0:
-#                 cons_no=ints(li[2])
-#                 event_03=[None]*10
-#                 for i in index_03:
-#                     if len(li[i])>0: event_03[i]=li[i]
-#                 if cons_no in cons_no_dict:
-#                     cons_no_dict[cons_no][6].append(event_03)
-#                 else:
-#                     user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
-#                     user_info_list[1]=cons_no_dict[911][1]
-#                     user_info_list[2]=cons_no_dict[911][2]
-#                     user_info_list[3]=cons_no_dict[911][3]
-#                     user_info_list[1][7]=cons_no
-#                     user_info_list[6].append(event_03)
-#                     cons_no_dict[cons_no]=user_info_list
-#         flag+=1
-#     input.close()
-#
-# print "03 end"
+index_03=[2]
+
+input=open('../data/test/03_s_info_oversee_test.tsv',"r")
+event_03=[None]*10
+flag = 0
+if len(index_03)>0:
+    for line in input:
+        if flag != 0:
+            line=line.strip('\n')
+            li = re.split('\t', line)
+            if len(li)==10 and len(li[2])>0:
+                cons_no=ints(li[2])
+                event_03=[None]*10
+                for i in index_03:
+                    if len(li[i])>0: event_03[i]=li[i]
+                if cons_no in cons_no_dict:
+                    cons_no_dict[cons_no][6].append(event_03)
+                else:
+                    user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+                    user_info_list[1]=cons_no_dict[911][1]
+                    user_info_list[2]=cons_no_dict[911][2]
+                    user_info_list[3]=cons_no_dict[911][3]
+                    user_info_list[1][7]=cons_no
+                    user_info_list[6].append(event_03)
+                    cons_no_dict[cons_no]=user_info_list
+        flag+=1
+    input.close()
+
+print "03 end"
 
 
 
