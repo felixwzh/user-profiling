@@ -393,15 +393,16 @@ if not debug:
     preds = bst.predict(dpredict)#, ntree_limit=bst.best_iteration)
     prefer_users = []
     # by threshold
-    # for idx in range(len(preds)):
-    #     if preds[idx] > best_thr - 1E-11:
-    #         prefer_users.append(pred_users[idx])
-    # by sort
-    sorted_index = np.argsort(-preds)
-    cut_line = int(len(preds)*best_thr)
-    print "final cut_line: " + `cut_line`
-    prefer_index = sorted_index[:cut_line]
-    prefer_users = [pred_users[idx] for idx in prefer_index]
+    if thr_or_cut:
+        for idx in range(len(preds)):
+            if preds[idx] > best_thr - 1E-11:
+                prefer_users.append(pred_users[idx])
+    else:
+        sorted_index = np.argsort(-preds)
+        cut_line = int(len(preds)*best_thr)
+        print "final cut_line: " + `cut_line`
+        prefer_index = sorted_index[:cut_line]
+        prefer_users = [pred_users[idx] for idx in prefer_index]
     save_data_list(prefer_users, folder + 'sens_user.txt')
 
 # xgb <- xgboost(data = data.matrix(X[,-1]), 
