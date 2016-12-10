@@ -1,7 +1,8 @@
 #!/usr/bin/python
+#-*- coding: utf-8 -*-
 from __future__ import division
 import re
-
+import codecs
 
 def ints(x):
     try:
@@ -455,9 +456,9 @@ print "01 end"
 # HANDLE_TIME:5      ACCEPT_CONTENT:6	HANDLE_OPINION:7	CALLING_NO:8
 # ELEC_TYPE:9	CUST_NO:10	PROV_ORG_NO:11	CITY_ORG_NO:12
 # index_01=[0,1,2,3,4,5,6,7,8,9,10,11,12]
-index_01 = [2,10]
+index_01 = [2,6,10]
 
-input = open('../data/train/01_arc_s_95598_wkst_train.tsv', "r")
+input = codecs. open('../data/train/01_arc_s_95598_wkst_train.tsv', "r",'UTF-8')
 event_01 = [None] * 13
 flag = 0
 if len(index_01) > 0:
@@ -469,7 +470,13 @@ if len(index_01) > 0:
                 if len(li[10]) > 0: cons_no = ints(li[10])
                 event_01 = [None] * 13
                 for i in index_01:
-                    if len(li[i]) > 0: event_01[i] = li[i]
+                    if len(li[i]) > 0:
+                        event_01[i] = li[i]
+                        # print li[6]
+                        # li[6]='0'
+                        # a=li[6].decode('utf8')
+                        # for c in  a:
+                        #     print a
                 if cons_no in cons_no_dict:
                     cons_no_dict[cons_no][4].append(event_01)
                     # else:
