@@ -44,14 +44,15 @@ while 1:
     if not lines:
         break
     for line in lines:
-        line=int(line.strip('\n'))
-        user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
-        cons_no_dict[line]=user_info_list
-        cons_no_dict[line][1]=[None]*23
-        cons_no_dict[line][2]=[None]*23
-        cons_no_dict[line][3]=[None]*23
+        line=ints(line.strip('\n'))
+        if line!=None:
+            user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+            cons_no_dict[line]=user_info_list
+            cons_no_dict[line][1]=[None]*23
+            cons_no_dict[line][2]=[None]*23
+            cons_no_dict[line][3]=[None]*23
 input.close()
-print "label_list done"
+print "get user_to_predict  done"
 
 
 
@@ -76,36 +77,34 @@ for line in input:
         line=line.strip('\n')
         li = re.split('\t', line)
         if len(li)==12:
-            if ints(li[0]) in cons_no_dict:
-                user=[None]*23
+            if ints(li[1]) in cons_no_dict:
+                # user=[None]*23
                 # user_info_list=[[]]*11
-                user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
-
                 cons_id=ints(li[0])
                 cons_no=ints(li[1])
-                if len(li[0])>0: user[1]=cons_id
-                if len(li[1])>0: user[7]=cons_no
-                # if len(li[2])>0: user[]=(li[2]) ADDR
+                if len(li[0])>0: cons_no_dict[cons_no][1][1]=cons_id
+                if len(li[1])>0: cons_no_dict[cons_no][1][7]=cons_no
+                # if len(li[2])>0: cons_no_dict[cons_no][]=(li[2]) ADDR
                 #?????
-                # if len(li[3])>0: user[13]=int(li[3])
-                if len(li[3])>0: user[13]=li[3]
-                # if len(li[4])>0: user[18]=int(li[4])
-                if len(li[4])>0: user[18]=li[4]
-                # if len(li[5])>0: user[22]=int(li[5])
-                if len(li[5])>0: user[22]=li[5]
-                if len(li[6])>0: user[19]=int(li[6])
-                if len(li[7])>0: user[15]=int(li[7])
-                if len(li[8])>0: user[10]=int(li[8])
-                if len(li[9])>0: user[17]=int(li[9])
-                # if len(li[10])>0: user[3]=int(li[10])
-                if len(li[10])>0: user[3]=li[10]
-                if len(li[11])>0: user[20]=int(li[11])
+                # if len(li[3])>0: cons_no_dict[cons_no][13]=int(li[3])
+                if len(li[3])>0: cons_no_dict[cons_no][1][13]=li[3]
+                # if len(li[4])>0: cons_no_dict[cons_no][18]=int(li[4])
+                if len(li[4])>0: cons_no_dict[cons_no][1][18]=li[4]
+                # if len(li[5])>0: cons_no_dict[cons_no][22]=int(li[5])
+                if len(li[5])>0: cons_no_dict[cons_no][1][22]=li[5]
+                if len(li[6])>0: cons_no_dict[cons_no][1][19]=int(li[6])
+                if len(li[7])>0: cons_no_dict[cons_no][1][15]=int(li[7])
+                if len(li[8])>0: cons_no_dict[cons_no][1][10]=int(li[8])
+                if len(li[9])>0: cons_no_dict[cons_no][1][17]=int(li[9])
+                # if len(li[10])>0: cons_no_dict[cons_no][3]=int(li[10])
+                if len(li[10])>0: cons_no_dict[cons_no][1][3]=li[10]
+                if len(li[11])>0: cons_no_dict[cons_no][1][20]=int(li[11])
 
-                user_info_list[0]=[cons_id]
+                cons_no_dict[cons_no][0]=[cons_id]
                 # user_info_list[0].append(cons_id)
-                user_info_list[1]=user
-                cons_no_dict[cons_no]=user_info_list
-                cons_id_dict[cons_id]=user_info_list
+                # user_info_list[1]=user
+                # cons_no_dict[cons_no]=user_info_list
+                cons_id_dict[cons_id]=cons_no_dict[cons_no]
                 # cons_id_dict[cons_id]=[cons_no,user]
                 # cons_no_dict[cons_no]=[cons_id,user]
     flag+=1
