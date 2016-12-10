@@ -11,6 +11,7 @@ def ints(x):
 
 
 
+
 # data structure
 # RCA_FLAG:0	CONS_ID:1	LABEL:2	CONS_SORT_CODE:3	TYPE_CODE:4	APPR_OPINION:5
 # METER_ID:6	CONS_NO:7	TS_FLAG:8	STATUS:9	STATUS_CODE:10	CONT_TYPE:11
@@ -35,6 +36,26 @@ user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
 # user_info_list[10]:event_list_12
 
 
+# load user_to_predict from user_to_predict.csv
+print "start get user_to_predict "
+input = open("../data/test/test_to_predict.csv","r")
+while 1:
+    lines = input.readlines()
+    if not lines:
+        break
+    for line in lines:
+        line=int(line.strip('\n'))
+        user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+        cons_no_dict[line]=user_info_list
+        cons_no_dict[line][1]=[None]*23
+        cons_no_dict[line][2]=[None]*23
+        cons_no_dict[line][3]=[None]*23
+input.close()
+print "label_list done"
+
+
+
+
 
 
 #load from 04
@@ -55,37 +76,38 @@ for line in input:
         line=line.strip('\n')
         li = re.split('\t', line)
         if len(li)==12:
-            user=[None]*23
-            # user_info_list=[[]]*11
-            user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+            if ints(li[0]) in cons_no_dict:
+                user=[None]*23
+                # user_info_list=[[]]*11
+                user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
 
-            cons_id=ints(li[0])
-            cons_no=ints(li[1])
-            if len(li[0])>0: user[1]=cons_id
-            if len(li[1])>0: user[7]=cons_no
-            # if len(li[2])>0: user[]=(li[2]) ADDR
-            #?????
-            # if len(li[3])>0: user[13]=int(li[3])
-            if len(li[3])>0: user[13]=li[3]
-            # if len(li[4])>0: user[18]=int(li[4])
-            if len(li[4])>0: user[18]=li[4]
-            # if len(li[5])>0: user[22]=int(li[5])
-            if len(li[5])>0: user[22]=li[5]
-            if len(li[6])>0: user[19]=int(li[6])
-            if len(li[7])>0: user[15]=int(li[7])
-            if len(li[8])>0: user[10]=int(li[8])
-            if len(li[9])>0: user[17]=int(li[9])
-            # if len(li[10])>0: user[3]=int(li[10])
-            if len(li[10])>0: user[3]=li[10]
-            if len(li[11])>0: user[20]=int(li[11])
+                cons_id=ints(li[0])
+                cons_no=ints(li[1])
+                if len(li[0])>0: user[1]=cons_id
+                if len(li[1])>0: user[7]=cons_no
+                # if len(li[2])>0: user[]=(li[2]) ADDR
+                #?????
+                # if len(li[3])>0: user[13]=int(li[3])
+                if len(li[3])>0: user[13]=li[3]
+                # if len(li[4])>0: user[18]=int(li[4])
+                if len(li[4])>0: user[18]=li[4]
+                # if len(li[5])>0: user[22]=int(li[5])
+                if len(li[5])>0: user[22]=li[5]
+                if len(li[6])>0: user[19]=int(li[6])
+                if len(li[7])>0: user[15]=int(li[7])
+                if len(li[8])>0: user[10]=int(li[8])
+                if len(li[9])>0: user[17]=int(li[9])
+                # if len(li[10])>0: user[3]=int(li[10])
+                if len(li[10])>0: user[3]=li[10]
+                if len(li[11])>0: user[20]=int(li[11])
 
-            user_info_list[0]=[cons_id]
-            # user_info_list[0].append(cons_id)
-            user_info_list[1]=user
-            cons_no_dict[cons_no]=user_info_list
-            cons_id_dict[cons_id]=user_info_list
-            # cons_id_dict[cons_id]=[cons_no,user]
-            # cons_no_dict[cons_no]=[cons_id,user]
+                user_info_list[0]=[cons_id]
+                # user_info_list[0].append(cons_id)
+                user_info_list[1]=user
+                cons_no_dict[cons_no]=user_info_list
+                cons_id_dict[cons_id]=user_info_list
+                # cons_id_dict[cons_id]=[cons_no,user]
+                # cons_no_dict[cons_no]=[cons_id,user]
     flag+=1
 input.close()
 print "04 end"
@@ -142,17 +164,17 @@ for line in input:
                 # if len(li[1])>0: cons_no_dict[cons_no][1][5]=(li[1])
                 if len(li[2])>0: cons_no_dict[cons_no][1][11]=int(li[2])
                 if len(li[3])>0: cons_no_dict[cons_no][1][9]=int(li[3])
-            else:
-                user=[None]*23
-                # user_info_list=[[]]*11
-                user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
-                user[1]=cons_no
-                # if len(li[1])>0: user[5]=(li[1])
-                if len(li[2])>0: user[11]=int(li[2])
-                if len(li[3])>0: user[9]=int(li[3])
-                user_info_list[1]=user
-                cons_no_dict[cons_no]=user_info_list
-                # cons_no_dict[cons_no]=[None,user]
+            # else:
+            #     user=[None]*23
+            #     # user_info_list=[[]]*11
+            #     user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+            #     user[1]=cons_no
+            #     # if len(li[1])>0: user[5]=(li[1])
+            #     if len(li[2])>0: user[11]=int(li[2])
+            #     if len(li[3])>0: user[9]=int(li[3])
+            #     user_info_list[1]=user
+            #     cons_no_dict[cons_no]=user_info_list
+            #     # cons_no_dict[cons_no]=[None,user]
     flag+=1
 input.close()
 print "06 end"
@@ -178,18 +200,18 @@ for line in input:
                 if len(li[1])>0: cons_no_dict[cons_no][1][17]=int(li[1])
                 if len(li[2])>0: cons_no_dict[cons_no][1][0]=int(li[2])
                 if len(li[3])>0: cons_no_dict[cons_no][1][16]=int(li[3])
-            else:
-                user=[None]*23
-                # user_info_list=[[]]*11
-                user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
-                user[1]=cons_no
-                if len(li[1])>0: user[17]=int(li[1])
-                if len(li[2])>0: user[0]=int(li[2])
-                if len(li[3])>0: user[16]=int(li[3])
-                #add this to other load part?
-                user_info_list[1]=user
-                cons_no_dict[cons_no]=user_info_list
-                # cons_no_dict[cons_no]=[None,user]
+            # else:
+            #     user=[None]*23
+            #     # user_info_list=[[]]*11
+            #     user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+            #     user[1]=cons_no
+            #     if len(li[1])>0: user[17]=int(li[1])
+            #     if len(li[2])>0: user[0]=int(li[2])
+            #     if len(li[3])>0: user[16]=int(li[3])
+            #     #add this to other load part?
+            #     user_info_list[1]=user
+            #     cons_no_dict[cons_no]=user_info_list
+            #     # cons_no_dict[cons_no]=[None,user]
     flag+=1
 input.close()
 print "07 end"
@@ -483,14 +505,14 @@ if len(index_01)>0:
                     if len(li[i])>0: event_01[i]=li[i]
                 if cons_no in cons_no_dict:
                     cons_no_dict[cons_no][4].append(event_01)
-                else:
-                    user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
-                    user_info_list[1]=cons_no_dict[911][1]
-                    user_info_list[2]=cons_no_dict[911][2]
-                    user_info_list[3]=cons_no_dict[911][3]
-                    user_info_list[1][7]=cons_no
-                    user_info_list[4].append(event_01)
-                    cons_no_dict[cons_no]=user_info_list
+                # else:
+                #     user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+                #     user_info_list[1]=cons_no_dict[911][1]
+                #     user_info_list[2]=cons_no_dict[911][2]
+                #     user_info_list[3]=cons_no_dict[911][3]
+                #     user_info_list[1][7]=cons_no
+                #     user_info_list[4].append(event_01)
+                #     cons_no_dict[cons_no]=user_info_list
                 if int(li[0]) in comm_95598_dict:
                     cons_no_dict[cons_no][5].append(comm_95598_dict[int(li[0])])
         flag+=1
@@ -533,14 +555,14 @@ if len(index_03)>0:
                     if len(li[i])>0: event_03[i]=li[i]
                 if cons_no in cons_no_dict:
                     cons_no_dict[cons_no][6].append(event_03)
-                else:
-                    user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
-                    user_info_list[1]=cons_no_dict[911][1]
-                    user_info_list[2]=cons_no_dict[911][2]
-                    user_info_list[3]=cons_no_dict[911][3]
-                    user_info_list[1][7]=cons_no
-                    user_info_list[6].append(event_03)
-                    cons_no_dict[cons_no]=user_info_list
+                # else:
+                #     user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+                #     user_info_list[1]=cons_no_dict[911][1]
+                #     user_info_list[2]=cons_no_dict[911][2]
+                #     user_info_list[3]=cons_no_dict[911][3]
+                #     user_info_list[1][7]=cons_no
+                #     user_info_list[6].append(event_03)
+                #     cons_no_dict[cons_no]=user_info_list
         flag+=1
     input.close()
 
@@ -571,14 +593,14 @@ if len(index_08)>0:
                     if len(li[i])>0: event_08[i]=li[i]
                 if cons_no in cons_no_dict:
                     cons_no_dict[cons_no][7].append(event_08)
-                else:
-                    user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
-                    user_info_list[1]=cons_no_dict[911][1]
-                    user_info_list[2]=cons_no_dict[911][2]
-                    user_info_list[3]=cons_no_dict[911][3]
-                    user_info_list[1][7]=cons_no
-                    user_info_list[7].append(event_08)
-                    cons_no_dict[cons_no]=user_info_list
+                # else:
+                #     user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+                #     user_info_list[1]=cons_no_dict[911][1]
+                #     user_info_list[2]=cons_no_dict[911][2]
+                #     user_info_list[3]=cons_no_dict[911][3]
+                #     user_info_list[1][7]=cons_no
+                #     user_info_list[7].append(event_08)
+                #     cons_no_dict[cons_no]=user_info_list
         flag=1
     input.close()
 
@@ -615,14 +637,14 @@ if len(index_09)>0:
                     if len(li[i])>0: event_09[i]=li[i]
                 if cons_no in cons_no_dict:
                     cons_no_dict[cons_no][8].append(event_09)
-                else:
-                    user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
-                    user_info_list[1]=cons_no_dict[911][1]
-                    user_info_list[2]=cons_no_dict[911][2]
-                    user_info_list[3]=cons_no_dict[911][3]
-                    user_info_list[1][7]=cons_no
-                    user_info_list[8].append(event_09)
-                    cons_no_dict[cons_no]=user_info_list
+                # else:
+                #     user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+                #     user_info_list[1]=cons_no_dict[911][1]
+                #     user_info_list[2]=cons_no_dict[911][2]
+                #     user_info_list[3]=cons_no_dict[911][3]
+                #     user_info_list[1][7]=cons_no
+                #     user_info_list[8].append(event_09)
+                #     cons_no_dict[cons_no]=user_info_list
         flag=1
     input.close()
 
@@ -667,14 +689,14 @@ if len(index_12)>0:
                     if len(li[i])>0: event_12[i]=li[i]
                 if cons_no in cons_no_dict:
                     cons_no_dict[cons_no][10].append(event_12)
-                else:
-                    user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
-                    user_info_list[1]=cons_no_dict[911][1]
-                    user_info_list[2]=cons_no_dict[911][2]
-                    user_info_list[3]=cons_no_dict[911][3]
-                    user_info_list[1][7]=cons_no
-                    user_info_list[10].append(event_12)
-                    cons_no_dict[cons_no]=user_info_list
+                # else:
+                #     user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+                #     user_info_list[1]=cons_no_dict[911][1]
+                #     user_info_list[2]=cons_no_dict[911][2]
+                #     user_info_list[3]=cons_no_dict[911][3]
+                #     user_info_list[1][7]=cons_no
+                #     user_info_list[10].append(event_12)
+                #     cons_no_dict[cons_no]=user_info_list
         flag=1
     input.close()
 
