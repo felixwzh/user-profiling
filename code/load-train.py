@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from __future__ import division
 import re
 
 
@@ -26,11 +27,6 @@ user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
 # user_info_list[8]:event_list_09
 # user_info_list[9]:event_list_10
 # user_info_list[10]:event_list_12
-
-
-
-
-
 
 
 
@@ -247,12 +243,12 @@ print "start add label"
 # METER_ID:6	CONS_NO:7	TS_FLAG:8	STATUS:9	STATUS_CODE:10	CONT_TYPE:11
 # MEAS_BOX:12	TRADE_CODE:13	ELEC_ADDR:14 'NL'	HEC_INDUSTRY_CODE:15	CONS_STATUS:16
 # ORG_NO:17	ELEC_TYPE_CODE:18	LODE_ATTR_CODE:19	URBAN_RURAL_FLAG:20	SORT_CODE:21	CONTRACT_CAP:22
-for cons_no in cons_no_dict:
-    if cons_no in user_list_label:
-        cons_no_dict[cons_no][1][2]=1
-    else:
-        cons_no_dict[cons_no][1][2]=0
-print "add label done"
+# for cons_no in cons_no_dict:
+#     if cons_no in user_list_label:
+#         cons_no_dict[cons_no][1][2]=1
+#     else:
+#         cons_no_dict[cons_no][1][2]=0
+# print "add label done"
 
 
 #start encode
@@ -261,104 +257,214 @@ print "add label done"
 # METER_ID:6	CONS_NO:7	TS_FLAG:8	STATUS:9	STATUS_CODE:10	CONT_TYPE:11
 # MEAS_BOX:12	TRADE_CODE:13	ELEC_ADDR:14 'NL'	HEC_INDUSTRY_CODE:15	CONS_STATUS:16
 # ORG_NO:17	ELEC_TYPE_CODE:18	LODE_ATTR_CODE:19	URBAN_RURAL_FLAG:20	SORT_CODE:21	CONTRACT_CAP:22
-def encode(*index):
-    print "encode begin "
-    encode_item_list_list=[None]*23
-    global cons_no_dict
+# def encode(*index):
+#     print "encode begin "
+#     encode_item_list_list=[None]*23
+#     global cons_no_dict
+#
+#
+#     #add fake user
+#     fake_user=['other']*23
+#     # user_info_list=[[]]*11
+#     user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+#     user_info_list[1]=fake_user
+#     cons_no_dict[110]=user_info_list
+#     #add None user
+#     None_user=[None]*23
+#     # user_info_list=[[]]*11
+#     user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+#     user_info_list[1]=None_user
+#     cons_no_dict[911]=user_info_list
+#
+#     for i in index:
+#         encode_item_list_list[i]={}
+#         encode_item_list_list[i][None]=len(encode_item_list_list[i])
+#         #encode_item_list_list[i][None]=0
+#
+#         encode_item_list_list[i]['other']=len(encode_item_list_list[i])
+#         #'other'  encode_item_list_list[i]['other']=1
+#
+#
+#     print "encode index end"
+#     # counter=1
+#     for user in cons_no_dict.values():
+#         # if counter%1000==0 :print counter
+#         user_item_index=[None]*23
+#         for i in index:
+#             if user[1][i] not in encode_item_list_list[i]:
+#                 encode_item_list_list[i][user[1][i]]=len(encode_item_list_list[i])
+#             # if user[1][i] == None :
+#             user_item_index[i]=encode_item_list_list[i][user[1][i]]+1#####  +1
+#
+#         user[2]=user_item_index#
+#         # counter+=1
+#     item_size_list=[None]*23
+#     for i in index:
+#         item_size_list[i]=len(encode_item_list_list[i])
+#
+#     for user in cons_no_dict.values():
+#         user_onehot_index=[None]*23
+#         counter=0
+#         for i in index:
+#             user_onehot_index[i]=user[2][i]+counter
+#             counter+=item_size_list[i]
+#         user[3]=user_onehot_index # user[3]
+#
+#     print "new user list end"
+#
+#     # output the uservec without None value
+#     output_onehot = open("../data/train/train_user_onehot_index.txt","w")
+#     for user in cons_no_dict.values():
+#         #output label
+#         if user[1][2]>0:
+#             output_onehot.write("1")
+#             output_onehot.write(" ")
+#         else:
+#             output_onehot.write("0")
+#             output_onehot.write(" ")
+#         #output index of one
+#         for i in index:
+#             if user[2][i]!=1:
+#                 output_onehot.write(str(user[3][i]))
+#                 output_onehot.write(":1 ")
+#         output_onehot.write('\n')
+#     output_onehot.close()
+#     # end
+#     print "output end"
+#
+#
+#
+#     output_index=open("../data/train/item_onehot_index_dict.txt","w")
+#
+#
+#     counter=0
+#     for i in index:
+#         for values in encode_item_list_list[i]:
+#             output_index.write(str(i))
+#             output_index.write(' ')
+#             output_index.write(str(values))
+#             output_index.write(' ')
+#             output_index.write(str(encode_item_list_list[i][values]+1+counter))
+#             output_index.write('\n')
+#         counter=item_size_list[i]+counter
+#     output_index.close()
+#
+#
+#
+#
+# encode(0,3,4,8,9,10,11,13,15,16,17,18,19,20,21,22)
 
 
-    #add fake user
-    fake_user=['other']*23
-    # user_info_list=[[]]*11
-    user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
-    user_info_list[1]=fake_user
-    cons_no_dict[110]=user_info_list
-    #add None user
-    None_user=[None]*23
-    # user_info_list=[[]]*11
-    user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
-    user_info_list[1]=None_user
-    cons_no_dict[911]=user_info_list
 
+
+
+
+
+
+
+index=[0,3,4,8,9,10,11,13,15,16,17,18,19,20,21,22]
+print "encode begin "
+encode_item_list_list=[None]*23
+
+
+#add fake user
+fake_user=['other']*23
+# user_info_list=[[]]*11
+user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+user_info_list[1]=fake_user
+cons_no_dict[110]=user_info_list
+#add None user
+None_user=[None]*23
+# user_info_list=[[]]*11
+user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+user_info_list[1]=None_user
+cons_no_dict[911]=user_info_list
+
+for i in index:
+    encode_item_list_list[i]={}
+    encode_item_list_list[i][None]=len(encode_item_list_list[i])
+    #encode_item_list_list[i][None]=0
+
+    encode_item_list_list[i]['other']=len(encode_item_list_list[i])
+    #'other'  encode_item_list_list[i]['other']=1
+
+
+print "encode index end"
+# counter=1
+for user in cons_no_dict.values():
+    # if counter%1000==0 :print counter
+    user_item_index=[None]*23
     for i in index:
-        encode_item_list_list[i]={}
-        encode_item_list_list[i][None]=len(encode_item_list_list[i])
-        #encode_item_list_list[i][None]=0
+        if user[1][i] not in encode_item_list_list[i]:
+            encode_item_list_list[i][user[1][i]]=len(encode_item_list_list[i])
+        # if user[1][i] == None :
+        user_item_index[i]=encode_item_list_list[i][user[1][i]]+1#####  +1
 
-        encode_item_list_list[i]['other']=len(encode_item_list_list[i])
-        #'other'  encode_item_list_list[i]['other']=1
+    user[2]=user_item_index#
+    # counter+=1
+item_size_list=[None]*23
+for i in index:
+    item_size_list[i]=len(encode_item_list_list[i])
 
-
-    print "encode index end"
-    # counter=1
-    for user in cons_no_dict.values():
-        # if counter%1000==0 :print counter
-        user_item_index=[None]*23
-        for i in index:
-            if user[1][i] not in encode_item_list_list[i]:
-                encode_item_list_list[i][user[1][i]]=len(encode_item_list_list[i])
-            # if user[1][i] == None :
-            user_item_index[i]=encode_item_list_list[i][user[1][i]]+1#####  +1
-
-        user[2]=user_item_index#
-        # counter+=1
-    item_size_list=[None]*23
-    for i in index:
-        item_size_list[i]=len(encode_item_list_list[i])
-
-    for user in cons_no_dict.values():
-        user_onehot_index=[None]*23
-        counter=0
-        for i in index:
-            user_onehot_index[i]=user[2][i]+counter
-            counter+=item_size_list[i]
-        user[3]=user_onehot_index # user[3]
-
-    print "new user list end"
-
-    # output the uservec without None value
-    output_onehot = open("../data/train/train_user_onehot_index.txt","w")
-    for user in cons_no_dict.values():
-        #output label
-        if user[1][2]>0:
-            output_onehot.write("1")
-            output_onehot.write(" ")
-        else:
-            output_onehot.write("0")
-            output_onehot.write(" ")
-        #output index of one
-        for i in index:
-            if user[2][i]!=1:
-                output_onehot.write(str(user[3][i]))
-                output_onehot.write(":1 ")
-        output_onehot.write('\n')
-    output_onehot.close()
-    # end
-    print "output end"
-
-
-
-    output_index=open("../data/train/item_onehot_index_dict.txt","w")
-
-
+for user in cons_no_dict.values():
+    user_onehot_index=[None]*23
     counter=0
     for i in index:
-        for values in encode_item_list_list[i]:
-            output_index.write(str(i))
-            output_index.write(' ')
-            output_index.write(str(values))
-            output_index.write(' ')
-            output_index.write(str(encode_item_list_list[i][values]+1+counter))
-            output_index.write('\n')
-        counter=item_size_list[i]+counter
-    output_index.close()
+        user_onehot_index[i]=user[2][i]+counter
+        counter+=item_size_list[i]
+    user[3]=user_onehot_index # user[3]
+
+print "new user list end"
 
 
 
 
-encode(0,3,4,8,9,10,11,13,15,16,17,18,19,20,21,22)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #load event info
+# creat a dict to link 01 and 02
+# APP_NO:0	HANDLE_ID:1	COMM_NO:2	REQ_BEGIN_DATE:3
+# REQ_FINISH_DATE:4	ORG_NO:5	BUSI_TYPE_CODE:6	WKST_BUSI_TYPE_CODE:7
+comm_95598_dict={}
+index_02=[0,1,2,3,4,5,6,7]
+input=open('../data/train/02_s_comm_rec.tsv',"r")
+
+flag = 0
+for line in input:
+    if flag != 0:
+        line=line.strip('\n')
+        li = re.split('\t', line)
+        if len(li)==8:
+            if len(li[0])>0:
+                app_no=int(li[0])
+                comm_95598_dict[app_no]=[None]*8
+                for i in index_02:
+                    if len(li[i])>0: comm_95598_dict[app_no][i]=li[i]
+    flag+=1
+input.close()
+print "01 end"
+
+
+
+
+
+
 
 # load from 01
 # user_info_list[4]:event_list_01
@@ -367,7 +473,9 @@ encode(0,3,4,8,9,10,11,13,15,16,17,18,19,20,21,22)
 # APP_NO:0	ID:1	BUSI_TYPE_CODE:2	URBAN_RURAL_FLAG:3  ORG_NO:4
 # HANDLE_TIME:5      ACCEPT_CONTENT:6	HANDLE_OPINION:7	CALLING_NO:8
 # ELEC_TYPE:9	CUST_NO:10	PROV_ORG_NO:11	CITY_ORG_NO:12
-index_01=[0,1,2,3,4,5,6,7,8,9,10,11,12]
+# index_01=[0,1,2,3,4,5,6,7,8,9,10,11,12]
+index_01=[10]
+
 input=open('../data/train/01_arc_s_95598_wkst_train.tsv',"r")
 event_01=[None]*13
 flag = 0
@@ -391,6 +499,8 @@ if len(index_01)>0:
                     user_info_list[1][7]=cons_no
                     user_info_list[4].append(event_01)
                     cons_no_dict[cons_no]=user_info_list
+                if int(li[0]) in comm_95598_dict:
+                    cons_no_dict[cons_no][5].append(comm_95598_dict[int(li[0])])
         flag+=1
     input.close()
 print "01 end"
@@ -413,7 +523,9 @@ print "01 end"
 # APP_NO:0	OVERSEE_TIME:1	CUST_NO:2	CUST_NAME:3
 # OVERSEE_RESON:4	OVERSEE_CONTENT:5	OVERSEE_APP_NO:6
 # ORG_OR_DEPT:7	APP_BUSI_TYPE_CODE:8	ORG_NO:9
-index_03=[0,1,2,3,4,5,6,7,8,9]
+# index_03=[0,1,2,3,4,5,6,7,8,9]
+index_03=[2]
+
 input=open('../data/train/03_s_info_oversee.tsv',"r")
 event_03=[None]*10
 flag = 0
@@ -450,7 +562,8 @@ print "03 end"
 # 77777777777777777777777777777777777777777
 # ORG_NO:0	CONS_NO:1	RCVED_YM:2	RCVED_DATE:3
 # THIS_RCVED_AMT:4	THIS_PENALTY:5	OWE_AMT:6	RCVBL_YM:7	RCVBL_PENALTY:8
-index_08=[0,1,2,3,4,5,6,7,8]
+# index_08=[0,1,2,3,4,5,6,7,8]
+index_08=[]
 input=open('../data/train/08_a_rcved_flow.tsv',"r")
 event_08=[None]*9
 flag = 0
@@ -492,7 +605,9 @@ print "08 end"
 # T_PQ:4	RCVBL_AMT:5	RCVED_AMT:6	STATUS_CODE:7
 # RCVBL_PENALTY:8	RCVED_PENALTY:9	RISK_LEVEL_CODE:10	OWE_AMT:11
 # CONS_SORT_CODE:12	ELEC_TYPE_CODE:13	CTL_MODE:14
-index_09=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+# index_09=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+index_09=[0,5,8]
+
 input=open('../data/train/09_arc_a_rcvbl_flow.tsv',"r")
 event_09=[None]*15
 flag = 0
@@ -529,6 +644,7 @@ print "09 end"
 
 # load from 10
 # user_info_list[9]:event_list_10
+# not needed ..
 
 
 
@@ -541,7 +657,9 @@ print "09 end"
 # load from 12
 # user_info_list[10]:event_list_12
 # CONS_NO:0	ORG_NO:1	CHARGE_YM:2	CHARGE_DATE:3	PAY_MODE:4
-index_12=[0,1,2,3,4]
+# index_12=[0,1,2,3,4]
+
+index_12=[]
 input=open('../data/train/12_a_pay_flow.tsv',"r")
 event_12=[None]*5
 flag = 0
@@ -571,13 +689,145 @@ if len(index_12)>0:
 print "12 end"
 
 
+# 95598 times for each user
+# 95598_times saved in user_info_list[0][1]
+
+# comm_times for each user
+# comm_times saved in user_info_list[0][2]
+
+# oversee_times for each user
+# oversee_times saved in user_info_list[0][3]
+
+# panalty_times for each user
+# panalty_times saved in user_info_list[0][4]
+
+# panalty_money_average for each user
+# panalty_money_average saved in user_info_list[0][5]
+
+# panalty_money_divide_money_average for each user
+# panalty_money_divide_money_average saved in user_info_list[0][6]
+
+# user_info_list[4]:event_list_01
+# user_info_list[5]:event_list_02
+# user_info_list[6]:event_list_03
+# user_info_list[7]:event_list_08
+# user_info_list[8]:event_list_09
+# user_info_list[9]:event_list_10
+# user_info_list[10]:event_list_12
+
+for user in cons_no_dict.values():
+    if len(user[0])<1:user[0].append(None)
+    user[0].append(len(user[4]))
+    user[0].append(len(user[5]))
+    user[0].append(len(user[6]))
+
+# load from 09
+# user_info_list[8]:event_list_09
+# 88888888888888888888888888888888888888888888888888888888
+# CONS_NO:0	RCVBL_YM:1	ORG_NO:2	PAY_MODE:3
+# T_PQ:4	RCVBL_AMT:5	RCVED_AMT:6	STATUS_CODE:7
+# RCVBL_PENALTY:8	RCVED_PENALTY:9	RISK_LEVEL_CODE:10	OWE_AMT:11
+# CONS_SORT_CODE:12	ELEC_TYPE_CODE:13	CTL_MODE:14
+    panalty_times=0
+    panalty_money_average=0.0
+    panalty_money_divide_money_average=0.0
+    if len(user[8])>0:
+        for event in user[8]:
+            if float(event[8])>0:
+                panalty_times+=1
+                panalty_money_average+=float(event[8])
+                if float(event[5])>0: panalty_money_divide_money_average=float(event[8])/float(event[5])
+        if panalty_times >0:
+            panalty_money_average/=panalty_times
+            panalty_money_divide_money_average/=panalty_times
+    user[0].append(panalty_times)
+    user[0].append(panalty_money_average)
+    user[0].append(panalty_money_divide_money_average)
 
 
 
 
 
+for cons_no in cons_no_dict:
+    if cons_no in user_list_label:
+        cons_no_dict[cons_no][1][2]=1
+    else:
+        cons_no_dict[cons_no][1][2]=0
+print "add label done"
 
 
+
+
+#### final output file
+
+
+
+output_index=open("../data/train/item_onehot_index_dict.txt","w")
+
+max_onehot_index=0
+counter=0
+for i in index:
+    for values in encode_item_list_list[i]:
+        output_index.write(str(i))
+        output_index.write(' ')
+        output_index.write(str(values))
+        output_index.write(' ')
+        output_index.write(str(encode_item_list_list[i][values]+1+counter))
+        output_index.write('\n')
+        if (encode_item_list_list[i][values]+1+counter) > max_onehot_index:
+            max_onehot_index=(encode_item_list_list[i][values]+1+counter)
+    counter=item_size_list[i]+counter
+output_index.close()
+
+
+
+# 95598 times for each user
+# 95598_times saved in user_info_list[0][1]
+
+# comm_times for each user
+# comm_times saved in user_info_list[0][2]
+
+# oversee_times for each user
+# oversee_times saved in user_info_list[0][3]
+
+# panalty_times for each user
+# panalty_times saved in user_info_list[0][4]
+
+# panalty_money_average for each user
+# panalty_money_average saved in user_info_list[0][5]
+
+# panalty_money_divide_money_average for each user
+# panalty_money_divide_money_average saved in user_info_list[0][6]
+# output the uservec without None value
+output_onehot = open("../data/train/train_user_onehot_index.txt","w")
+for user in cons_no_dict.values():
+    #output label
+    if user[1][2]>0:
+        output_onehot.write("1")
+        output_onehot.write(" ")
+    else:
+        output_onehot.write("0")
+        output_onehot.write(" ")
+    #output index of one
+    for i in index:
+        if user[2][i]!=1:
+            output_onehot.write(str(user[3][i]))
+            output_onehot.write(":1 ")
+    for j in range(1,7):
+        if len(user[0])>j:
+            if user[0][j]!=None:
+                if user[0][j]>0:
+                    output_onehot.write(str(max_onehot_index+j))
+                    output_onehot.write(':')
+                    output_onehot.write(str(user[0][j]))
+                    output_onehot.write(' ')
+    output_onehot.write('\n')
+output_onehot.close()
+# end
+print "output end"
+
+
+# print cons_no_dict[5115500151]
 
 
 
