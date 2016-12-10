@@ -846,7 +846,7 @@ output_index.write(str(max_index+7))
 output_index.write(':0')
 output_index.write('\n')
 output_index.close()
-print cons_no_dict
+
 
 
 
