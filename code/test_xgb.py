@@ -181,7 +181,7 @@ def f1_score_by_abs_score(labels, preds, thr):
     tn = 0
     fp = 0
     fn = 0
-    for i in range(len(labels)):
+    for i in range(len(preds)):
         label = labels[i]
         prob = preds[i]
         if label > 0.5: # true
@@ -216,7 +216,7 @@ def f1_score_by_sort(labels, preds, thr):
     hate_index = sorted_index[cut_line:]
     # raw_input()
     # count
-    for idx in sorted_index:
+    for idx in prefer_index:
         # print `preds[idx]` + '\t' + `labels[idx]`
         if idx < cut_line: # positive
             # print labels[idx]
@@ -247,15 +247,16 @@ def get_pos_index(preds, thr):
 
 # 0. INITIALIZATION
 if len(sys.argv) < 2:
-    print "python test_xgb.py debug(1/0) refresh_model(1/0) test_to_predict_file_name"
+    print "python test_xgb.py debug(1/0) refresh_model(1/0) thr_search_flag"
     exit(-1)
 debug = True if int(sys.argv[1]) > 0 else False
 refresh_flag = False
+thr_search_flag = False
+pred_file = 'test_to_predict.csv'
 if len(sys.argv) > 2:
     refresh_flag = True if int(sys.argv[2]) > 0 else False
 if len(sys.argv) > 3:
-    pred_file = sys.argv[3]
-
+    thr_search_flag = True if int(sys.argv[3]) > 0 else False
 
 
 
@@ -338,26 +339,40 @@ else:
 
 # make prediction
 preds = bst.predict(dtest)#, ntree_limit=bst.best_iteration)
+max_prob = preds.max()
+mean_prob = preds.mean()
 print "max " + `preds.max()`
 print "meam " + `preds.mean()`
 print "len " + `len(preds)`
-print "pos: " + `1.0 * count_positive(preds, base_score) / len(preds)`
+print "pos ratio: " + `1.0 * count_positive(preds, base_score) / len(preds)`
 
 
 
 
 
-
-thr = base_score
 # 3. TEST part
-# f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_abs_score(dtest.get_label(), preds, thr)
-f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_sort(dtest.get_label(), preds, thr)
-print "f1_score\t" + `f1_score`
-print "precision\t" + `precision`
-print "recall\t" + `recall`
+best_thr = base_score + 1E-11
+# best_thr = mean_prob
+if not thr_search_flag:
+    # f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_abs_score(dtest.get_label(), preds, best_thr)
+    f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_sort(dtest.get_label(), preds, best_thr)
+    print "f1_score\t" + `f1_score`
+    print "precision\t" + `precision`
+    print "recall\t" + `recall`
+else: # thr searching method.
+    print "Searching best thr ..."
+    random.seed(100)
+    value_set = random.sample(set(preds), 200)
+    best_f1 = -1.0
+    best_thr = -1.0
+    for v in value_set:
+        f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_abs_score(dtest.get_label(), preds, v)
+        if f1_score > best_f1:
+            best_thr = v
+    print "best thr: " + `best_thr`
+    print "best f1: " + `best_f1`
 
 
-# TODO add thr searching method.
 
 
 
@@ -365,8 +380,14 @@ print "recall\t" + `recall`
 if not debug:
     pred_users = read_data_list(folder + pred_file)
     preds = bst.predict(dpredict)#, ntree_limit=bst.best_iteration)
+    prefer_users = []
+    # by threshold
+    # for idx in range(len(preds)):
+    #     if preds[idx] > best_thr - 1E-11:
+    #         prefer_users.append(pred_users[idx])
+    # by sort
     sorted_index = np.argsort(-preds)
-    cut_line = int(len(preds)*thr)
+    cut_line = int(len(preds)*best_thr)
     print "cut_line: " + `cut_line`
     prefer_index = sorted_index[:cut_line]
     prefer_users = [pred_users[idx] for idx in prefer_index]
