@@ -253,7 +253,7 @@ debug = True if int(sys.argv[1]) > 0 else False
 refresh_flag = False
 thr_search_flag = False
 pred_file = 'test_to_predict.csv'
-thr_or_cut = False
+thr_or_cut = True
 if len(sys.argv) > 2:
     refresh_flag = True if int(sys.argv[2]) > 0 else False
 if len(sys.argv) > 3:
@@ -399,7 +399,7 @@ if not debug:
     # by sort
     sorted_index = np.argsort(-preds)
     cut_line = int(len(preds)*best_thr)
-    print "cut_line: " + `cut_line`
+    print "final cut_line: " + `cut_line`
     prefer_index = sorted_index[:cut_line]
     prefer_users = [pred_users[idx] for idx in prefer_index]
     save_data_list(prefer_users, folder + 'sens_user.txt')
