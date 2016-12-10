@@ -497,23 +497,24 @@ if len(index_01)>0:
         if flag != 0:
             line=line.strip('\n')
             li = re.split('\t', line)
-            if len(li)==13:
-                if len(li[10])>0: cons_no=ints(li[10])
-                event_01=[None]*13
-                for i in index_01:
-                    if len(li[i])>0: event_01[i]=li[i]
-                if cons_no in cons_no_dict:
-                    cons_no_dict[cons_no][4].append(event_01)
-                # else:
-                #     user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
-                #     user_info_list[1]=cons_no_dict[911][1]
-                #     user_info_list[2]=cons_no_dict[911][2]
-                #     user_info_list[3]=cons_no_dict[911][3]
-                #     user_info_list[1][7]=cons_no
-                #     user_info_list[4].append(event_01)
-                #     cons_no_dict[cons_no]=user_info_list
-                if int(li[0]) in comm_95598_dict:
-                    cons_no_dict[cons_no][5].append(comm_95598_dict[int(li[0])])
+            if ints(li[10]) in cons_no_dict:
+                if len(li)==13:
+                    if len(li[10])>0: cons_no=ints(li[10])
+                    event_01=[None]*13
+                    for i in index_01:
+                        if len(li[i])>0: event_01[i]=li[i]
+                    if cons_no in cons_no_dict:
+                        cons_no_dict[cons_no][4].append(event_01)
+                    # else:
+                    #     user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+                    #     user_info_list[1]=cons_no_dict[911][1]
+                    #     user_info_list[2]=cons_no_dict[911][2]
+                    #     user_info_list[3]=cons_no_dict[911][3]
+                    #     user_info_list[1][7]=cons_no
+                    #     user_info_list[4].append(event_01)
+                    #     cons_no_dict[cons_no]=user_info_list
+                    if int(li[0]) in comm_95598_dict:
+                        cons_no_dict[cons_no][5].append(comm_95598_dict[int(li[0])])
         flag+=1
     input.close()
 print "01 end"
