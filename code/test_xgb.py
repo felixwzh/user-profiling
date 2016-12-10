@@ -188,12 +188,12 @@ def f1_score_by_abs_score(labels, preds, thr):
             if prob > thr - 1E-11: # positive
                 tp = tp + 1
             else: # negative
-                tn = tn + 1
+                fn = fn + 1
         else: # false
             if prob > thr - 1E-11: # positive
                 fp = fp + 1
             else: # negative
-                fn = fn + 1
+                tn = tn + 1
     precision = 1.0 * tp / (tp + fp)
     recall = 1.0 * tp / (tp + fn)
     f1_score = 2.0 * precision * recall / (precision + recall) if precision > 0 or recall > 0 else 0.0
@@ -247,16 +247,19 @@ def get_pos_index(preds, thr):
 
 # 0. INITIALIZATION
 if len(sys.argv) < 2:
-    print "python test_xgb.py debug(1/0) refresh_model(1/0) thr_search_flag"
+    print "python test_xgb.py debug(1/0) refresh_model(1/0) thr_search_flag(1/0) thr_or_cut(1/0)"
     exit(-1)
 debug = True if int(sys.argv[1]) > 0 else False
 refresh_flag = False
 thr_search_flag = False
 pred_file = 'test_to_predict.csv'
+thr_or_cut = False
 if len(sys.argv) > 2:
     refresh_flag = True if int(sys.argv[2]) > 0 else False
 if len(sys.argv) > 3:
     thr_search_flag = True if int(sys.argv[3]) > 0 else False
+if len(sys.argv) > 4:
+    thr_or_cut = True if int(sys.argv[4]) > 0 else False
 
 
 
@@ -354,19 +357,27 @@ print "pos ratio: " + `1.0 * count_positive(preds, base_score) / len(preds)`
 best_thr = base_score + 1E-11
 # best_thr = mean_prob
 if not thr_search_flag:
-    # f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_abs_score(dtest.get_label(), preds, best_thr)
-    f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_sort(dtest.get_label(), preds, best_thr)
+    if thr_or_cut:
+        f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_abs_score(dtest.get_label(), preds, best_thr)
+    else:
+        f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_sort(dtest.get_label(), preds, best_thr)
     print "f1_score\t" + `f1_score`
     print "precision\t" + `precision`
     print "recall\t" + `recall`
 else: # thr searching method.
     print "Searching best thr ..."
-    random.seed(100)
-    value_set = random.sample(set(preds), 200)
+    # random.seed(100)
+    # value_set = random.sample(set(preds), 20)
+    value_set = list()
     best_f1 = -1.0
     best_thr = -1.0
+    print "f1\tprec\trec"
     for v in value_set:
-        f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_abs_score(dtest.get_label(), preds, v)
+        if thr_or_cut:
+            f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_abs_score(dtest.get_label(), preds, v)
+        else:
+            f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_sort(dtest.get_label(), preds, v)
+        print `f1_score` + '\t' + `precision` + '\t' + `recall`
         if f1_score > best_f1:
             best_thr = v
     print "best thr: " + `best_thr`
