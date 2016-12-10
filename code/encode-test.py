@@ -20,8 +20,9 @@ def ints(x):
 user=[None]*23
 cons_id_dict={}
 cons_no_dict={}
+added_feature_no=20
 # user_info_list=[[]]*11# something wrong if write in this way , so changed it in an ugly way
-user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+user_info_list = [[],[],[],[],[],[],[],[],[],[],[]]
 
 # user_info_list[0]:CONS_ID
 # user_info_list[1]:23 items value in x axis
@@ -47,6 +48,7 @@ while 1:
         line=ints(line.strip('\n'))
         if line!=None:
             user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+            user_info_list[0] = [None] * added_feature_no
             cons_no_dict[line]=user_info_list
             cons_no_dict[line][1]=[None]*23
             cons_no_dict[line][2]=[None]*23
@@ -100,7 +102,7 @@ for line in input:
                 if len(li[10])>0: cons_no_dict[cons_no][1][3]=li[10]
                 if len(li[11])>0: cons_no_dict[cons_no][1][20]=int(li[11])
 
-                cons_no_dict[cons_no][0]=[cons_id]
+                cons_no_dict[cons_no][0][0]=cons_id
                 # user_info_list[0].append(cons_id)
                 # user_info_list[1]=user
                 # cons_no_dict[cons_no]=user_info_list
@@ -384,12 +386,14 @@ encode_item_list_list=[None]*23
 fake_user=['other']*23
 # user_info_list=[[]]*11
 user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+user_info_list[0]=[None]*added_feature_no
 user_info_list[1]=fake_user
 cons_no_dict[110]=user_info_list
 #add None user
 None_user=[None]*23
 # user_info_list=[[]]*11
 user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
+user_info_list[0]=[None]*added_feature_no
 user_info_list[1]=None_user
 cons_no_dict[911]=user_info_list
 
@@ -487,7 +491,7 @@ print "01 end"
 # HANDLE_TIME:5      ACCEPT_CONTENT:6	HANDLE_OPINION:7	CALLING_NO:8
 # ELEC_TYPE:9	CUST_NO:10	PROV_ORG_NO:11	CITY_ORG_NO:12
 # index_01=[0,1,2,3,4,5,6,7,8,9,10,11,12]
-index_01=[10]
+index_01=[2,10]
 
 input=open('../data/test/01_arc_s_95598_wkst_test.tsv',"r")
 event_01=[None]*13
@@ -728,12 +732,12 @@ print "12 end"
 # user_info_list[8]:event_list_09
 # user_info_list[9]:event_list_10
 # user_info_list[10]:event_list_12
-
+busi_type_code_dict = {}
 for user in cons_no_dict.values():
-    if len(user[0])<1:user[0].append(None)
-    user[0].append(len(user[4]))
-    user[0].append(len(user[5]))
-    user[0].append(len(user[6]))
+    user[0][1]=(len(user[4]))
+    user[0][2]=(len(user[5]))
+    user[0][3]=(len(user[6]))
+
 
 # load from 09
 # user_info_list[8]:event_list_09
@@ -742,6 +746,7 @@ for user in cons_no_dict.values():
 # T_PQ:4	RCVBL_AMT:5	RCVED_AMT:6	STATUS_CODE:7
 # RCVBL_PENALTY:8	RCVED_PENALTY:9	RISK_LEVEL_CODE:10	OWE_AMT:11
 # CONS_SORT_CODE:12	ELEC_TYPE_CODE:13	CTL_MODE:14
+
     panalty_times=0
     panalty_money_average=0.0
     panalty_money_divide_money_average=0.0
@@ -754,9 +759,24 @@ for user in cons_no_dict.values():
         if panalty_times >0:
             panalty_money_average/=panalty_times
             panalty_money_divide_money_average/=panalty_times
-    user[0].append(panalty_times)
-    user[0].append(panalty_money_average)
-    user[0].append(panalty_money_divide_money_average)
+    user[0][4]=(panalty_times)
+    user[0][5]=(panalty_money_average)
+    user[0][6]=(panalty_money_divide_money_average)
+    if len(user[4]) > 0:
+        user_busi_type_code = {}
+        for event in user[4]:
+            if event[2] not in busi_type_code_dict:
+                busi_type_code_dict[event[2]] = len(busi_type_code_dict) + 1
+                user_busi_type_code[event[2]] = [busi_type_code_dict[event[2]], 1]
+                continue
+            if event[2] not in user_busi_type_code:
+                user_busi_type_code[event[2]] = [busi_type_code_dict[event[2]], 1]
+                continue
+            user_busi_type_code[event[2]][1] += 1
+        user[0][7] = []
+        for pair in user_busi_type_code.values():
+            # print pair
+            user[0][7].append(pair)
 
 
 
@@ -814,12 +834,21 @@ for user in cons_no_dict.values():
                     output_index.write(':')
                     output_index.write(str(user[0][j]))
                     output_index.write(' ')
+    if user[0][7]!=None:
+        for pair in user[0][7]:
+            output_index.write(str(max_index + 6+int(pair[0])))
+            output_index.write(':')
+            output_index.write(str(pair[1]))
+            output_index.write(' ')
     output_index.write('\n')
 output_index.write('0 ')
-output_index.write(str(max_index+6))
+output_index.write(str(max_index+7))
 output_index.write(':0')
 output_index.write('\n')
 output_index.close()
+print cons_no_dict
+
+
 
 
 
