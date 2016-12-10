@@ -226,9 +226,9 @@ def f1_score_by_sort(labels, preds, thr):
                 fp = fp + 1
         else: # negative
             if labels[idx] > 0.5: # true
-                tn = tn + 1
-            else: # false
                 fn = fn + 1
+            else: # false
+                tn = tn + 1
     precision = 1.0 * tp / (tp + fp)
     recall = 1.0 * tp / (tp + fn)
     f1_score = 2.0 * precision * recall / (precision + recall) if precision > 0 or recall > 0 else 0.0
