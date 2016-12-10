@@ -59,7 +59,7 @@ for line in input:
             # user_info_list=[[]]*11
             user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
 
-            cons_id=intss(li[0])
+            cons_id=ints(li[0])
             cons_no=ints(li[1])
             if len(li[0])>0: user[1]=cons_id
             if len(li[1])>0: user[7]=cons_no
@@ -107,7 +107,7 @@ for line in input:
         line=line.strip('\n')
         li = re.split('\t', line)
         if len(li)==3:
-            cons_id=intss(li[0])
+            cons_id=ints(li[0])
             if cons_id in cons_id_dict:
                 if len(li[1])>0: cons_id_dict[cons_id][1][8]=int(li[1])
                 if len(li[2])>0: cons_id_dict[cons_id][1][17]=int(li[2])
@@ -208,7 +208,7 @@ for line in input:
         line=line.strip('\n')
         li = re.split('\t', line)
         if len(li)==6:
-            if len(li[5])>0: cons_id=intss(li[5])
+            if len(li[5])>0: cons_id=ints(li[5])
             if cons_id in cons_id_dict:
                 if len(li[1])>0: cons_id_dict[cons_id][1][17]=int(li[1])
                 if len(li[2])>0: cons_id_dict[cons_id][1][12]=li[2] # int(021937631X) invalid
