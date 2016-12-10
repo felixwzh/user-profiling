@@ -497,8 +497,8 @@ if len(index_01)>0:
         if flag != 0:
             line=line.strip('\n')
             li = re.split('\t', line)
-            if ints(li[10]) in cons_no_dict:
-                if len(li)==13:
+            if len(li)==13:
+                if ints(li[10]) in cons_no_dict:
                     if len(li[10])>0: cons_no=ints(li[10])
                     event_01=[None]*13
                     for i in index_01:
