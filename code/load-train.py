@@ -2,7 +2,12 @@
 from __future__ import division
 import re
 
-
+def ints(x):
+    try:
+        y=int(x)
+        return y
+    except ValueError:
+        return None
 
 
 # data structure
@@ -53,8 +58,8 @@ for line in input:
             # user_info_list=[[]]*11
             user_info_list=[[],[],[],[],[],[],[],[],[],[],[]]
 
-            cons_id=int(li[0])
-            cons_no=int(li[1])
+            cons_id=ints(li[0])
+            cons_no=ints(li[1])
             if len(li[0])>0: user[1]=cons_id
             if len(li[1])>0: user[7]=cons_no
             # if len(li[2])>0: user[]=(li[2]) ADDR
@@ -101,7 +106,7 @@ for line in input:
         line=line.strip('\n')
         li = re.split('\t', line)
         if len(li)==3:
-            cons_id=int(li[0])
+            cons_id=ints(li[0])
             if cons_id in cons_id_dict:
                 if len(li[1])>0: cons_id_dict[cons_id][1][8]=int(li[1])
                 if len(li[2])>0: cons_id_dict[cons_id][1][17]=int(li[2])
@@ -131,7 +136,7 @@ for line in input:
         line=line.strip('\n')
         li = re.split('\t', line)
         if len(li)==4:
-            cons_no=int(li[0])
+            cons_no=ints(li[0])
             if cons_no in cons_no_dict:
                 # if len(li[1])>0: cons_no_dict[cons_no][1][5]=(li[1])
                 if len(li[2])>0: cons_no_dict[cons_no][1][11]=int(li[2])
@@ -167,7 +172,7 @@ for line in input:
         line=line.strip('\n')
         li = re.split('\t', line)
         if len(li)==4:
-            cons_no=int(li[0])
+            cons_no=ints(li[0])
             if cons_no in cons_no_dict:
                 if len(li[1])>0: cons_no_dict[cons_no][1][17]=int(li[1])
                 if len(li[2])>0: cons_no_dict[cons_no][1][0]=int(li[2])
@@ -202,7 +207,7 @@ for line in input:
         line=line.strip('\n')
         li = re.split('\t', line)
         if len(li)==6:
-            if len(li[5])>0: cons_id=int(li[5])
+            if len(li[5])>0: cons_id=ints(li[5])
             if cons_id in cons_id_dict:
                 if len(li[1])>0: cons_id_dict[cons_id][1][17]=int(li[1])
                 if len(li[2])>0: cons_id_dict[cons_id][1][12]=li[2] # int(021937631X) invalid
@@ -485,7 +490,7 @@ if len(index_01)>0:
             line=line.strip('\n')
             li = re.split('\t', line)
             if len(li)==13:
-                if len(li[10])>0: cons_no=int(li[10])
+                if len(li[10])>0: cons_no=ints(li[10])
                 event_01=[None]*13
                 for i in index_01:
                     if len(li[i])>0: event_01[i]=li[i]
@@ -535,7 +540,7 @@ if len(index_03)>0:
             line=line.strip('\n')
             li = re.split('\t', line)
             if len(li)==10 and len(li[2])>0:
-                cons_no=int(li[2])
+                cons_no=ints(li[2])
                 event_03=[None]*10
                 for i in index_03:
                     if len(li[i])>0: event_03[i]=li[i]
@@ -573,7 +578,7 @@ if len(index_08)>0:
             line=line.strip('\n')
             li = re.split('\t', line)
             if len(li)==9 and len(li[1])>0:
-                cons_no=int(li[1])
+                cons_no=ints(li[1])
                 event_08=[None]*9
                 for i in index_08:
                     if len(li[i])>0: event_08[i]=li[i]
@@ -617,7 +622,7 @@ if len(index_09)>0:
             line=line.strip('\n')
             li = re.split('\t', line)
             if len(li)==15 and len(li[0])>0:
-                cons_no=int(li[0])
+                cons_no=ints(li[0])
                 event_09=[None]*15
                 for i in index_09:
                     if len(li[i])>0: event_09[i]=li[i]
@@ -669,7 +674,7 @@ if len(index_12)>0:
             line=line.strip('\n')
             li = re.split('\t', line)
             if len(li)==5 and len(li[0])>0:
-                cons_no=int(li[0])
+                cons_no=ints(li[0])
                 event_12=[None]*5
                 for i in index_12:
                     if len(li[i])>0: event_12[i]=li[i]
