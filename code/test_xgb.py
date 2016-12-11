@@ -378,7 +378,7 @@ else: # thr searching method.
             f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_abs_score(dtest.get_label(), preds, v)
         else:
             f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_sort(dtest.get_label(), preds, v)
-        print "%.2f\t%.2f\t%.2f\t%.2f\t%.2f" % (r, v, f1_score, precision, recall)
+        print "%.2f\t%.2f\t%.6f\t%.6f\t%.6f" % (r, v, f1_score, precision, recall)
         # `r` + '\t' + `v` + '\t' + `f1_score` + '\t' + `precision` + '\t' + `recall`
         if f1_score > best_f1:
             best_thr = v
