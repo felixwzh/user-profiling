@@ -368,7 +368,8 @@ else: # thr searching method.
     print "Searching best thr ..."
     # random.seed(100)
     # value_set = random.sample(set(preds), 20)
-    value_set = list()
+    ran = [(0.8 + v * 0.02) for v in range(10)] + [(1.0 + v * 0.02) for v in range(10)]
+    value_set = [best_thr * v for v in ran]
     best_f1 = -1.0
     best_thr = -1.0
     print "f1\tprec\trec"
