@@ -381,6 +381,7 @@ else: # thr searching method.
         print `f1_score` + '\t' + `precision` + '\t' + `recall`
         if f1_score > best_f1:
             best_thr = v
+            best_f1 = f1_score
     print "best thr: " + `best_thr`
     print "best f1: " + `best_f1`
 
