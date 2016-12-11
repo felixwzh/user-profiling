@@ -372,13 +372,13 @@ else: # thr searching method.
     value_set = [best_thr * v for v in ran]
     best_f1 = -1.0
     best_thr = -1.0
-    print "f1\tprec\trec"
-    for v in value_set:
+    print "scale\tthr_v\tf1\tprec\trec"
+    for (r,v) in zip(ran, value_set):
         if thr_or_cut:
             f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_abs_score(dtest.get_label(), preds, v)
         else:
             f1_score, precision, recall, tp, tn, fp, fn = f1_score_by_sort(dtest.get_label(), preds, v)
-        print `f1_score` + '\t' + `precision` + '\t' + `recall`
+        print `r` + '\t' + `v` + '\t' + `f1_score` + '\t' + `precision` + '\t' + `recall`
         if f1_score > best_f1:
             best_thr = v
             best_f1 = f1_score
