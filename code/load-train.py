@@ -456,6 +456,13 @@ print "01 end"
 # HANDLE_TIME:5      ACCEPT_CONTENT:6	HANDLE_OPINION:7	CALLING_NO:8
 # ELEC_TYPE:9	CUST_NO:10	PROV_ORG_NO:11	CITY_ORG_NO:12
 # index_01=[0,1,2,3,4,5,6,7,8,9,10,11,12]
+
+
+def get_multihot_keyword():
+    pass
+
+
+
 index_01 = [2,6,10]
 
 input = open('../data/train/01_arc_s_95598_wkst_train.tsv', "r")
@@ -472,10 +479,8 @@ if len(index_01) > 0:
                 for i in index_01:
                     if len(li[i]) > 0:
                         event_01[i] = li[i]
-                        # if i==6:
-                        #     a=li[6].decode('gbk')
-                        #     print a
-                        #
+
+
                 if cons_no in cons_no_dict:
                     cons_no_dict[cons_no][4].append(event_01)
                     # else:
@@ -683,11 +688,14 @@ print "12 end"
 
 busi_type_code_dict={}
 for user in cons_no_dict.values():
+    #1-3
     if len(user[0])==0:user[0]=[None]*added_feature_no
     user[0][1] = (len(user[4]))
     user[0][2] = (len(user[5]))
     user[0][3] = (len(user[6]))
 
+
+    #4-6
     panalty_times = 0
     panalty_money_average = 0.0
     panalty_money_divide_money_average = 0.0
@@ -703,6 +711,7 @@ for user in cons_no_dict.values():
     user[0][4] = (panalty_times)
     user[0][5] = (panalty_money_average)
     user[0][6] = (panalty_money_divide_money_average)
+    #7
     if len(user[4])>0:
         user_busi_type_code={}
         for event in user[4]:
@@ -719,7 +728,20 @@ for user in cons_no_dict.values():
             # print pair
             user[0][7].append(pair)
 
+    # 8 keyword in u'【】'
+    #
+    ####
+    # if i == 6:
+    #     a = li[6].decode('gbk')
+    #     # print a[0]
+    #     if a.find(u'【') != -1 and a.find(u'】') != -1:
+    #         lh = a.index(u'【')
+    #         rh = a.index(u'】')
+    #     keyword = a[lh + 1:rh]
+    #     print keyword
 
+
+    ####
 
 
 for cons_no in cons_no_dict:
