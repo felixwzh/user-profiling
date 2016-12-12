@@ -744,7 +744,12 @@ print "12 end"
 # user_info_list[8]:event_list_09
 # user_info_list[9]:event_list_10
 # user_info_list[10]:event_list_12
-busi_type_code_dict = {}
+# 7
+busi_type_code_dict={}
+
+# 8
+user_multihot_keyword_dict={}
+max_onehot_index_for_08=0
 for user in cons_no_dict.values():
     user[0][1]=(len(user[4]))
     user[0][2]=(len(user[5]))
@@ -774,6 +779,8 @@ for user in cons_no_dict.values():
     user[0][4]=(panalty_times)
     user[0][5]=(panalty_money_average)
     user[0][6]=(panalty_money_divide_money_average)
+
+    #7
     if len(user[4]) > 0:
         user_busi_type_code = {}
         for event in user[4]:
@@ -789,6 +796,35 @@ for user in cons_no_dict.values():
         for pair in user_busi_type_code.values():
             # print pair
             user[0][7].append(pair)
+    # 8
+    ####
+    max_onehot_index_for_08 = len(busi_type_code_dict)
+    if len(user[4]) > 0:
+        user_multihot_keyword_pair_dict = {}
+        for event in user[4]:
+            # get the key word in one evet
+            a = event[6].decode('gbk').encode("utf-8")
+            # print a[0]
+            # if a.find(u'【') != -1 and a.find(u'】') != -1:
+            #     lh = a.index(u'【')
+            #     rh = a.index(u'】')
+            if a.find('【') != -1 and a.find('】') != -1:
+                lh = a.index('【')
+                rh = a.index('】')
+                keyword = (a[lh + len('【'):rh])
+                print keyword
+                if keyword not in user_multihot_keyword_dict:
+                    user_multihot_keyword_dict[keyword] = len(user_multihot_keyword_dict) + 1
+                    user_multihot_keyword_pair_dict[keyword] = [user_multihot_keyword_dict[keyword], 1]
+                    continue
+                if keyword not in user_multihot_keyword_pair_dict:
+                    user_multihot_keyword_pair_dict[keyword] = [user_multihot_keyword_dict[keyword], 1]
+                    continue
+                user_multihot_keyword_pair_dict[keyword][1] += 1
+        user[0][8] = []
+        for pair in user_multihot_keyword_pair_dict.values():
+            user[0][8].append(pair)
+        print user[0][8]
 
 
 
@@ -893,6 +929,15 @@ while 1:
                 output_index.write(':')
                 output_index.write(str(pair[1]))
                 output_index.write(' ')
+
+        if user[0][8] != None:
+            for pair in user[0][8]:
+                output_index.write(str(max_onehot_index_for_08 + max_index + 6 + int(pair[0])))
+                output_index.write(':')
+                output_index.write(str(pair[1]))
+                output_index.write(' ')
+
+
         output_index.write('\n')
 
     output_index.write('0 ')

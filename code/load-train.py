@@ -458,8 +458,6 @@ print "01 end"
 # index_01=[0,1,2,3,4,5,6,7,8,9,10,11,12]
 
 
-def get_multihot_keyword():
-    pass
 
 
 
@@ -686,7 +684,16 @@ print "12 end"
 # busi_type_code_index list saved in user_info_list[0][7]
 # [[123,3],[009,1],[008,4]]
 
+# user_multihot_keyword_pair_dict
+# saved in user_info_list[0][7]
+# [[1,3],[2,1],[3,4]]  can be used like X+1:3
+
+# 7
 busi_type_code_dict={}
+
+# 8
+user_multihot_keyword_dict={}
+max_onehot_index_for_08=0
 for user in cons_no_dict.values():
     #1-3
     if len(user[0])==0:user[0]=[None]*added_feature_no
@@ -728,17 +735,38 @@ for user in cons_no_dict.values():
             # print pair
             user[0][7].append(pair)
 
-    # 8 keyword in u'【】'
-    #
+
+    #8
     ####
-    # if i == 6:
-    #     a = li[6].decode('gbk')
-    #     # print a[0]
-    #     if a.find(u'【') != -1 and a.find(u'】') != -1:
-    #         lh = a.index(u'【')
-    #         rh = a.index(u'】')
-    #     keyword = a[lh + 1:rh]
-    #     print keyword
+    max_onehot_index_for_08=len(busi_type_code_dict)
+    if len(user[4])>0:
+        user_multihot_keyword_pair_dict={}
+        for event in user[4]:
+            # get the key word in one evet
+            a = event[6].decode('gbk').encode("utf-8")
+            # print a[0]
+            # if a.find(u'【') != -1 and a.find(u'】') != -1:
+            #     lh = a.index(u'【')
+            #     rh = a.index(u'】')
+            if a.find('【') != -1 and a.find('】') != -1:
+                lh = a.index('【')
+                rh = a.index('】')
+                keyword = (a[lh + len('【'):rh])
+                print keyword
+                if keyword not in user_multihot_keyword_dict:
+                    user_multihot_keyword_dict[keyword]=len(user_multihot_keyword_dict)+1
+                    user_multihot_keyword_pair_dict[keyword]=[user_multihot_keyword_dict[keyword],1]
+                    continue
+                if keyword not in user_multihot_keyword_pair_dict:
+                    user_multihot_keyword_pair_dict[keyword]=[user_multihot_keyword_dict[keyword],1]
+                    continue
+                user_multihot_keyword_pair_dict[keyword][1]+=1
+        user[0][8]=[]
+        for pair in user_multihot_keyword_pair_dict.values():
+            user[0][8].append(pair)
+        print user[0][8]
+
+
 
 
     ####
@@ -813,16 +841,26 @@ for user in cons_no_dict.values():
                     output_onehot.write(':')
                     output_onehot.write(str(user[0][j]))
                     output_onehot.write(' ')
+    #
+
     if user[0][7]!=None:
         for pair in user[0][7]:
+
             output_onehot.write(str(max_onehot_index + 6+int(pair[0])))
             output_onehot.write(':')
             output_onehot.write(str(pair[1]))
             output_onehot.write(' ')
+
+    if user[0][8]!=None:
+        for pair in user[0][8]:
+            output_onehot.write(str(max_onehot_index_for_08 + max_onehot_index + 6+int(pair[0])))
+            output_onehot.write(':')
+            output_onehot.write(str(pair[1]))
+            output_onehot.write(' ')
+
+
     output_onehot.write('\n')
 output_onehot.close()
 # end
 print "output end"
 
-
-# print cons_no_dict[5115500151]
