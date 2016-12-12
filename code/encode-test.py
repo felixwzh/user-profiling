@@ -812,7 +812,7 @@ for user in cons_no_dict.values():
                 lh = a.index('【')
                 rh = a.index('】')
                 keyword = (a[lh + len('【'):rh])
-                print keyword
+
                 if keyword not in user_multihot_keyword_dict:
                     user_multihot_keyword_dict[keyword] = len(user_multihot_keyword_dict) + 1
                     user_multihot_keyword_pair_dict[keyword] = [user_multihot_keyword_dict[keyword], 1]
@@ -824,7 +824,7 @@ for user in cons_no_dict.values():
         user[0][8] = []
         for pair in user_multihot_keyword_pair_dict.values():
             user[0][8].append(pair)
-        print user[0][8]
+
 
 
 
