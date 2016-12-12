@@ -861,5 +861,12 @@ for user in cons_no_dict.values():
     output_onehot.write('\n')
 output_onehot.close()
 # end
-print "output end"
-
+# print "output end"
+#
+# fo=open("../data/test/test_to_predict.csv","w")
+# for user in cons_no_dict:
+#     fo.write(str(user))
+#     fo.write('\n')
+#
+#
+# fo.close()

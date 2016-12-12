@@ -63,10 +63,16 @@ print "get user_to_predict  done"
 
 
 #load from 04
-# in 04
+# in 04_train
 # CONS_ID:0	    CONS_NO:1 	        ELEC_ADDR:2	    TRADE_CODE:3  	ELEC_TYPE_CODE:4
 # CONTRACT_CAP:5	LODE_ATTR_CODE:6	    HEC_INDUSTRY_CODE:7	    STATUS_CODE:8
 # ORG_NO:9	    CONS_SORT_CODE:10	    URBAN_RURAL_FLAG:11
+
+
+# in 04_test
+# CONS_NO:0	CONS_ID:1	CONS_SORT_CODE:2	CONTRACT_CAP:3
+# ELEC_ADDR:4	ELEC_TYPE_CODE:5	HEC_INDUSTRY_CODE:6
+# LODE_ATTR_CODE:7	ORG_NO:8	STATUS_CODE:9	TRADE_CODE:10	URBAN_RURAL_FLAG:11
 
 # data structure
 # RCA_FLAG:0	CONS_ID:1	LABEL:2	CONS_SORT_CODE:3	TYPE_CODE:4	APPR_OPINION:5 'NL'
@@ -80,27 +86,27 @@ for line in input:
         line=line.strip('\n')
         li = re.split('\t', line)
         if len(li)==12:
-            if ints(li[1]) in cons_no_dict:
+            if ints(li[0]) in cons_no_dict:
                 # user=[None]*23
                 # user_info_list=[[]]*11
-                cons_id=ints(li[0])
-                cons_no=ints(li[1])
-                if len(li[0])>0: cons_no_dict[cons_no][1][1]=cons_id
-                if len(li[1])>0: cons_no_dict[cons_no][1][7]=cons_no
+                cons_id=ints(li[1])
+                cons_no=ints(li[0])
+                if len(li[1])>0: cons_no_dict[cons_no][1][1]=cons_id
+                if len(li[0])>0: cons_no_dict[cons_no][1][7]=cons_no
                 # if len(li[2])>0: cons_no_dict[cons_no][]=(li[2]) ADDR
                 #?????
                 # if len(li[3])>0: cons_no_dict[cons_no][13]=int(li[3])
-                if len(li[3])>0: cons_no_dict[cons_no][1][13]=li[3]
+                if len(li[3])>0: cons_no_dict[cons_no][1][22]=li[3]
                 # if len(li[4])>0: cons_no_dict[cons_no][18]=int(li[4])
-                if len(li[4])>0: cons_no_dict[cons_no][1][18]=li[4]
+                if len(li[4])>0: cons_no_dict[cons_no][1][14]=li[4]
                 # if len(li[5])>0: cons_no_dict[cons_no][22]=int(li[5])
-                if len(li[5])>0: cons_no_dict[cons_no][1][22]=li[5]
-                if len(li[6])>0: cons_no_dict[cons_no][1][19]=int(li[6])
-                if len(li[7])>0: cons_no_dict[cons_no][1][15]=int(li[7])
-                if len(li[8])>0: cons_no_dict[cons_no][1][10]=int(li[8])
-                if len(li[9])>0: cons_no_dict[cons_no][1][17]=int(li[9])
+                if len(li[5])>0: cons_no_dict[cons_no][1][18]=li[5]
+                if len(li[6])>0: cons_no_dict[cons_no][1][15]=int(li[6])
+                if len(li[7])>0: cons_no_dict[cons_no][1][19]=int(li[7])
+                if len(li[8])>0: cons_no_dict[cons_no][1][17]=int(li[8])
+                if len(li[9])>0: cons_no_dict[cons_no][1][10]=int(li[9])
                 # if len(li[10])>0: cons_no_dict[cons_no][3]=int(li[10])
-                if len(li[10])>0: cons_no_dict[cons_no][1][3]=li[10]
+                if len(li[10])>0: cons_no_dict[cons_no][1][13]=li[10]
                 if len(li[11])>0: cons_no_dict[cons_no][1][20]=int(li[11])
 
                 cons_no_dict[cons_no][0][0]=cons_id
@@ -219,8 +225,13 @@ input.close()
 print "07 end"
 
 #load from 11
-#METER_ID:0	ORG_NO:1	MEAS_BOX:2	SORT_CODE:3	TYPE_CODE:4	CONS_ID:5
+
+
+# 11_test
+# CONS_ID:0	METER_ID:1	ORG_NO:2	SORT_CODE:3	TYPE_CODE:4
+
 # data structure
+
 # RCA_FLAG:0	CONS_ID:1	LABEL:2	CONS_SORT_CODE:3	TYPE_CODE:4	APPR_OPINION:5 'NL'
 # METER_ID:6	CONS_NO:7	TS_FLAG:8	STATUS:9	STATUS_CODE:10	CONT_TYPE:11
 # MEAS_BOX:12	TRADE_CODE:13	ELEC_ADDR:14 'NL'	HEC_INDUSTRY_CODE:15	CONS_STATUS:16
@@ -232,10 +243,10 @@ for line in input:
         line=line.strip('\n')
         li = re.split('\t', line)
         if len(li)==6:
-            if len(li[5])>0: cons_id=ints(li[5])
+            if len(li[0])>0: cons_id=ints(li[0])
             if cons_id in cons_id_dict:
-                if len(li[1])>0: cons_id_dict[cons_id][1][17]=int(li[1])
-                if len(li[2])>0: cons_id_dict[cons_id][1][12]=li[2] # int(021937631X) invalid
+                if len(li[1])>0: cons_id_dict[cons_id][1][6]=int(li[1])
+                if len(li[2])>0: cons_id_dict[cons_id][1][17]=li[2] # int(021937631X) invalid
                 if len(li[3])>0: cons_id_dict[cons_id][1][21]=int(li[3])
                 if len(li[4])>0: cons_id_dict[cons_id][1][4]=int(li[4])
         # else:
@@ -915,6 +926,7 @@ while 1:
             elif user[1][i] != None:
                 output_index.write(str(onehot_index_dict_list[i][user[1][i]]))
                 output_index.write(':1 ')
+
         for j in range(1, 7):
             if len(user[0]) > j:
                 if user[0][j] != None:
