@@ -492,7 +492,7 @@ print "01 end"
 # HANDLE_TIME:5      ACCEPT_CONTENT:6	HANDLE_OPINION:7	CALLING_NO:8
 # ELEC_TYPE:9	CUST_NO:10	PROV_ORG_NO:11	CITY_ORG_NO:12
 # index_01=[0,1,2,3,4,5,6,7,8,9,10,11,12]
-index_01=[2,10]
+index_01=[2,6,10]
 
 input=open('../data/test/01_arc_s_95598_wkst_test.tsv',"r")
 event_01=[None]*13
@@ -501,14 +501,24 @@ if len(index_01)>0:
     for line in input:
         if flag != 0:
             line=line.strip('\n')
-            li = re.split('\t', line)
+            # li = re.split('\t', line)
+            li=line.split()
             if len(li)==13:
                 if ints(li[10]) in cons_no_dict:
                     if len(li[10])>0: cons_no=ints(li[10])
                     event_01=[None]*13
                     for i in index_01:
-                        if len(li[i])>0: event_01[i]=li[i]
-                    
+                        if len(li[i])>0:
+                            event_01[i]=li[i]
+                            #
+                            #
+                            # str=li[7].decode("gb18030")
+                            # print li[7]
+                            # print li[7].decode('gb2312', 'replace').encode('utf-8')
+
+                            # print str
+
+                            #
                     if cons_no in cons_no_dict:
                         cons_no_dict[cons_no][4].append(event_01)
                     # else:

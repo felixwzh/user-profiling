@@ -458,7 +458,7 @@ print "01 end"
 # index_01=[0,1,2,3,4,5,6,7,8,9,10,11,12]
 index_01 = [2,6,10]
 
-input = codecs. open('../data/train/01_arc_s_95598_wkst_train.tsv', "r",'UTF-8')
+input = open('../data/train/01_arc_s_95598_wkst_train.tsv', "r")
 event_01 = [None] * 13
 flag = 0
 if len(index_01) > 0:
@@ -472,11 +472,10 @@ if len(index_01) > 0:
                 for i in index_01:
                     if len(li[i]) > 0:
                         event_01[i] = li[i]
-                        # print li[6]
-                        # li[6]='0'
-                        # a=li[6].decode('utf8')
-                        # for c in  a:
+                        # if i==6:
+                        #     a=li[6].decode('gbk')
                         #     print a
+                        #
                 if cons_no in cons_no_dict:
                     cons_no_dict[cons_no][4].append(event_01)
                     # else:
