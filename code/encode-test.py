@@ -86,7 +86,39 @@ for line in input:
         line=line.strip('\n')
         li = re.split('\t', line)
         if len(li)==12:
+            # if ints(li[1]) in cons_no_dict:
+            #
+            #     # user=[None]*23
+            #     # user_info_list=[[]]*11
+            #     cons_id = ints(li[0])
+            #     cons_no = ints(li[1])
+            #     if len(li[0]) > 0: cons_no_dict[cons_no][1][1] = cons_id
+            #     if len(li[1]) > 0: cons_no_dict[cons_no][1][7] = cons_no
+            #     # if len(li[2])>0: cons_no_dict[cons_no][]=(li[2]) ADDR
+            #     # ?????
+            #     # if len(li[3])>0: cons_no_dict[cons_no][13]=int(li[3])
+            #     if len(li[3]) > 0: cons_no_dict[cons_no][1][13] = li[3]
+            #     # if len(li[4])>0: cons_no_dict[cons_no][18]=int(li[4])
+            #     if len(li[4]) > 0: cons_no_dict[cons_no][1][18] = li[4]
+            #     # if len(li[5])>0: cons_no_dict[cons_no][22]=int(li[5])
+            #     if len(li[5]) > 0: cons_no_dict[cons_no][1][22] = li[5]
+            #     if len(li[6]) > 0: cons_no_dict[cons_no][1][19] = int(li[6])
+            #     if len(li[7]) > 0: cons_no_dict[cons_no][1][15] = int(li[7])
+            #     if len(li[8]) > 0: cons_no_dict[cons_no][1][10] = int(li[8])
+            #     if len(li[9]) > 0: cons_no_dict[cons_no][1][17] = int(li[9])
+            #     # if len(li[10])>0: cons_no_dict[cons_no][3]=int(li[10])
+            #     if len(li[10]) > 0: cons_no_dict[cons_no][1][3] = li[10]
+            #     if len(li[11]) > 0: cons_no_dict[cons_no][1][20] = int(li[11])
+            #
+            #     cons_no_dict[cons_no][0][0] = cons_id
+            #     # user_info_list[0].append(cons_id)
+            #     # user_info_list[1]=user
+            #     # cons_no_dict[cons_no]=user_info_list
+            #     cons_id_dict[cons_id] = cons_no_dict[cons_no]
+            #     # cons_id_dict[cons_id]=[cons_no,user]
+            #     # cons_no_dict[cons_no]=[cons_id,user]
             if ints(li[0]) in cons_no_dict:
+
                 # user=[None]*23
                 # user_info_list=[[]]*11
                 cons_id=ints(li[1])
@@ -242,6 +274,13 @@ for line in input:
     if flag != 0:
         line=line.strip('\n')
         li = re.split('\t', line)
+        # if len(li)==6:
+        #     if len(li[5])>0: cons_id=ints(li[5])
+        #     if cons_id in cons_id_dict:
+        #         if len(li[1])>0: cons_id_dict[cons_id][1][17]=int(li[1])
+        #         if len(li[2])>0: cons_id_dict[cons_id][1][12]=li[2] # int(021937631X) invalid
+        #         if len(li[3])>0: cons_id_dict[cons_id][1][21]=int(li[3])
+        #         if len(li[4])>0: cons_id_dict[cons_id][1][4]=int(li[4])
         if len(li)==6:
             if len(li[0])>0: cons_id=ints(li[0])
             if cons_id in cons_id_dict:
@@ -512,8 +551,8 @@ if len(index_01)>0:
     for line in input:
         if flag != 0:
             line=line.strip('\n')
-            # li = re.split('\t', line)
-            li=line.split()
+            li = re.split('\t', line)
+            # li=line.split()
             if len(li)==13:
                 if ints(li[10]) in cons_no_dict:
                     if len(li[10])>0: cons_no=ints(li[10])
@@ -762,6 +801,7 @@ busi_type_code_dict={}
 user_multihot_keyword_dict={}
 max_onehot_index_for_08=0
 for user in cons_no_dict.values():
+    if len(user[0]) == 0: user[0] = [None] * added_feature_no
     user[0][1]=(len(user[4]))
     user[0][2]=(len(user[5]))
     user[0][3]=(len(user[6]))
@@ -815,6 +855,7 @@ for user in cons_no_dict.values():
         for event in user[4]:
             # get the key word in one evet
             a = event[6].decode('gbk').encode("utf-8")
+            # print  a
             # print a[0]
             # if a.find(u'【') != -1 and a.find(u'】') != -1:
             #     lh = a.index(u'【')
@@ -833,8 +874,10 @@ for user in cons_no_dict.values():
                     continue
                 user_multihot_keyword_pair_dict[keyword][1] += 1
         user[0][8] = []
+
         for pair in user_multihot_keyword_pair_dict.values():
             user[0][8].append(pair)
+
 
 
 
@@ -948,7 +991,6 @@ while 1:
                 output_index.write(':')
                 output_index.write(str(pair[1]))
                 output_index.write(' ')
-
 
         output_index.write('\n')
 

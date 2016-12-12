@@ -744,6 +744,7 @@ for user in cons_no_dict.values():
         for event in user[4]:
             # get the key word in one evet
             a = event[6].decode('gbk').encode("utf-8")
+            # print a
             # print a[0]
             # if a.find(u'【') != -1 and a.find(u'】') != -1:
             #     lh = a.index(u'【')
@@ -818,6 +819,7 @@ output_index.close()
 # panalty_money_divide_money_average saved in user_info_list[0][6]
 # output the uservec without None value
 output_onehot = open("../data/train/train_user_onehot_index.txt", "w")
+maxmax=0
 for user in cons_no_dict.values():
     # output label
     if user[1][2] > 0:
@@ -852,13 +854,17 @@ for user in cons_no_dict.values():
 
     if user[0][8]!=None:
         for pair in user[0][8]:
+
             output_onehot.write(str(max_onehot_index_for_08 + max_onehot_index + 6+int(pair[0])))
             output_onehot.write(':')
             output_onehot.write(str(pair[1]))
             output_onehot.write(' ')
+            if (max_onehot_index_for_08 + max_onehot_index + 6+int(pair[0]))>maxmax:
+                maxmax=(max_onehot_index_for_08 + max_onehot_index + 6+int(pair[0]))
 
 
     output_onehot.write('\n')
+
 output_onehot.close()
 # end
 # print "output end"
