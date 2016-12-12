@@ -1,4 +1,5 @@
 #!/usr/bin/python
+#-*- coding: utf-8 -*-
 from __future__ import division
 import re
 
@@ -72,7 +73,7 @@ print "get user_to_predict  done"
 # METER_ID:6	CONS_NO:7	TS_FLAG:8	STATUS:9	STATUS_CODE:10	CONT_TYPE:11
 # MEAS_BOX:12	TRADE_CODE:13	ELEC_ADDR:14 'NL'	HEC_INDUSTRY_CODE:15	CONS_STATUS:16
 # ORG_NO:17	ELEC_TYPE_CODE:18	LODE_ATTR_CODE:19	URBAN_RURAL_FLAG:20	SORT_CODE:21	CONTRACT_CAP:22
-input=open('../data/test/04_c_cons_test.tsv',"r")
+input=open('../data/test/04_c_cons_test.tsv' , "r")
 flag = 0
 for line in input:
     if flag != 0:
@@ -507,6 +508,7 @@ if len(index_01)>0:
                     event_01=[None]*13
                     for i in index_01:
                         if len(li[i])>0: event_01[i]=li[i]
+                    
                     if cons_no in cons_no_dict:
                         cons_no_dict[cons_no][4].append(event_01)
                     # else:
@@ -815,36 +817,80 @@ input_index.close()
 
 
 
-output_index=open('../data/test/test_user_onehot_index.txt',"w")
-for user in cons_no_dict.values():
-    output_index.write('0 ')
-    for i in index:
+# output_index=open('../data/test/test_user_onehot_index.txt',"w")
+# for user in cons_no_dict.values():
+#     output_index.write('0 ')
+#     for i in index:
+#
+#         if user[1][i] not in onehot_index_dict_list[i]:
+#             output_index.write(str(onehot_index_dict_list[i]['other']))
+#             output_index.write(':1 ')
+#         elif user[1][i]!=None:
+#             output_index.write(str(onehot_index_dict_list[i][user[1][i]]))
+#             output_index.write(':1 ')
+#     for j in range(1,7):
+#         if len(user[0])>j:
+#             if user[0][j]!=None:
+#                 if user[0][j]>0:
+#                     output_index.write(str(max_index+j))
+#                     output_index.write(':')
+#                     output_index.write(str(user[0][j]))
+#                     output_index.write(' ')
+#     if user[0][7]!=None:
+#         for pair in user[0][7]:
+#             output_index.write(str(max_index + 6+int(pair[0])))
+#             output_index.write(':')
+#             output_index.write(str(pair[1]))
+#             output_index.write(' ')
+#     output_index.write('\n')
+# output_index.write('0 ')
+# output_index.write(str(max_index+7))
+# output_index.write(':0')
+# output_index.write('\n')
+# output_index.close()
 
-        if user[1][i] not in onehot_index_dict_list[i]:
-            output_index.write(str(onehot_index_dict_list[i]['other']))
-            output_index.write(':1 ')
-        elif user[1][i]!=None:
-            output_index.write(str(onehot_index_dict_list[i][user[1][i]]))
-            output_index.write(':1 ')
-    for j in range(1,7):
-        if len(user[0])>j:
-            if user[0][j]!=None:
-                if user[0][j]>0:
-                    output_index.write(str(max_index+j))
-                    output_index.write(':')
-                    output_index.write(str(user[0][j]))
-                    output_index.write(' ')
-    if user[0][7]!=None:
-        for pair in user[0][7]:
-            output_index.write(str(max_index + 6+int(pair[0])))
-            output_index.write(':')
-            output_index.write(str(pair[1]))
-            output_index.write(' ')
+
+output_index=open('../data/test/test_user_onehot_index.txt',"w")
+input = open("../data/test/test_to_predict.csv","r")
+
+while 1:
+    lines = input.readlines()
+    if not lines:
+        break
+    for line in lines:
+        line=ints(line.strip('\n'))
+        user=cons_no_dict[line]
+        output_index.write('0 ')
+        for i in index:
+
+            if user[1][i] not in onehot_index_dict_list[i]:
+                output_index.write(str(onehot_index_dict_list[i]['other']))
+                output_index.write(':1 ')
+            elif user[1][i] != None:
+                output_index.write(str(onehot_index_dict_list[i][user[1][i]]))
+                output_index.write(':1 ')
+        for j in range(1, 7):
+            if len(user[0]) > j:
+                if user[0][j] != None:
+                    if user[0][j] > 0:
+                        output_index.write(str(max_index + j))
+                        output_index.write(':')
+                        output_index.write(str(user[0][j]))
+                        output_index.write(' ')
+        if user[0][7] != None:
+            for pair in user[0][7]:
+                output_index.write(str(max_index + 6 + int(pair[0])))
+                output_index.write(':')
+                output_index.write(str(pair[1]))
+                output_index.write(' ')
+        output_index.write('\n')
+
+    output_index.write('0 ')
+    output_index.write(str(max_index + 7))
+    output_index.write(':0')
     output_index.write('\n')
-output_index.write('0 ')
-output_index.write(str(max_index+7))
-output_index.write(':0')
-output_index.write('\n')
+
+input.close()
 output_index.close()
 
 
