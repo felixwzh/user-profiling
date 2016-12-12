@@ -194,8 +194,8 @@ def f1_score_by_abs_score(labels, preds, thr):
                 fp = fp + 1
             else: # negative
                 tn = tn + 1
-    precision = 1.0 * tp / (tp + fp)
-    recall = 1.0 * tp / (tp + fn)
+    precision = 1.0 * tp / (tp + fp) if tp > 0 or fp > 0 else 0.0
+    recall = 1.0 * tp / (tp + fn) if tp > 0 or fn > 0 else 0.0
     f1_score = 2.0 * precision * recall / (precision + recall) if precision > 0 or recall > 0 else 0.0
     return f1_score, precision, recall, tp, tn, fp, fn
 
@@ -229,8 +229,8 @@ def f1_score_by_sort(labels, preds, thr):
                 fn = fn + 1
             else: # false
                 tn = tn + 1
-    precision = 1.0 * tp / (tp + fp)
-    recall = 1.0 * tp / (tp + fn)
+    precision = 1.0 * tp / (tp + fp) if tp > 0 or fp > 0 else 0.0
+    recall = 1.0 * tp / (tp + fn) if tp > 0 or fn > 0 else 0.0
     f1_score = 2.0 * precision * recall / (precision + recall) if precision > 0 or recall > 0 else 0.0
     return f1_score, precision, recall, tp, tn, fp, fn
 
@@ -254,12 +254,15 @@ refresh_flag = False
 thr_search_flag = False
 pred_file = 'test_to_predict.csv'
 thr_or_cut = True
+base_score = -1.0
 if len(sys.argv) > 2:
     refresh_flag = True if int(sys.argv[2]) > 0 else False
 if len(sys.argv) > 3:
     thr_search_flag = True if int(sys.argv[3]) > 0 else False
 if len(sys.argv) > 4:
     thr_or_cut = True if int(sys.argv[4]) > 0 else False
+if len(sys.argv) > 5:
+    base_score = float(sys.argv[5]) if float(sys.argv[5]) > 0.0 else -1.0
 
 
 
@@ -312,7 +315,8 @@ else:
 
 
 # 2. TRAIN part
-base_score = array_pos_ratio(dtrain_full.get_label()) # calculated from full train or sub train?
+if not base_score > 0.0:
+    base_score = array_pos_ratio(dtrain_full.get_label()) # calculated from full train or sub train?
 print "base_score: " + `base_score`
 param = {   
             'early_stopping_rounds': 2,
@@ -368,7 +372,8 @@ else: # thr searching method.
     print "Searching best thr ..."
     # random.seed(100)
     # value_set = random.sample(set(preds), 20)
-    ran = [(0.8 + v * 0.02) for v in range(10)] + [(1.0 + v * 0.02) for v in range(10)]
+    start = 0.9
+    ran = [(start + v * (1.0-start)/10) for v in range(10)] + [(1.0 + v * (1.0-start)/10) for v in range(10)]
     value_set = [best_thr * v for v in ran]
     best_f1 = -1.0
     best_thr = -1.0
