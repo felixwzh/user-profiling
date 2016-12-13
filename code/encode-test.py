@@ -86,6 +86,7 @@ for line in input:
         line=line.strip('\n')
         li = re.split('\t', line)
         if len(li)==12:
+            # # #old for debug
             # if ints(li[1]) in cons_no_dict:
             #
             #     # user=[None]*23
@@ -117,6 +118,8 @@ for line in input:
             #     cons_id_dict[cons_id] = cons_no_dict[cons_no]
             #     # cons_id_dict[cons_id]=[cons_no,user]
             #     # cons_no_dict[cons_no]=[cons_id,user]
+
+            # # new
             if ints(li[0]) in cons_no_dict:
 
                 # user=[None]*23
@@ -274,6 +277,7 @@ for line in input:
     if flag != 0:
         line=line.strip('\n')
         li = re.split('\t', line)
+        # # old for debug
         # if len(li)==6:
         #     if len(li[5])>0: cons_id=ints(li[5])
         #     if cons_id in cons_id_dict:
@@ -281,6 +285,7 @@ for line in input:
         #         if len(li[2])>0: cons_id_dict[cons_id][1][12]=li[2] # int(021937631X) invalid
         #         if len(li[3])>0: cons_id_dict[cons_id][1][21]=int(li[3])
         #         if len(li[4])>0: cons_id_dict[cons_id][1][4]=int(li[4])
+        # new
         if len(li)==6:
             if len(li[0])>0: cons_id=ints(li[0])
             if cons_id in cons_id_dict:
@@ -288,6 +293,7 @@ for line in input:
                 if len(li[2])>0: cons_id_dict[cons_id][1][17]=li[2] # int(021937631X) invalid
                 if len(li[3])>0: cons_id_dict[cons_id][1][21]=int(li[3])
                 if len(li[4])>0: cons_id_dict[cons_id][1][4]=int(li[4])
+
         # else:
         #     user=[None]*23
         #     user[1]=cons_id
@@ -769,6 +775,53 @@ if len(index_12)>0:
 print "12 end"
 
 
+
+
+###################################################################
+index=[0,3,4,8,9,10,11,13,15,16,17,18,19,20,21,22]
+input_index=open('../data/train/item_onehot_index_dict.txt',"r")
+#   user[13] [22] [12] are int
+#   other = -1
+onehot_index_dict_list=[None]*23
+for i in index:
+    onehot_index_dict_list[i]={}
+busi_type_code_dict={}
+user_multihot_keyword_dict={}
+max_index=0
+for line in input_index:
+    line=line.strip('\n')
+    li = re.split(' ', line)
+    ind = int(li[0])
+    # if int(li[2])>max_index:max_index=int(li[2])
+    if ind in index:
+        if int(li[2])>max_index:max_index=int(li[2])
+        if ind==13 or ind==22 or ind==12 or ind ==18 or ind ==3:
+            if li[1]=='other':
+                onehot_index_dict_list[ind]['other']=int(li[2])
+            elif li[1]=='None':
+                onehot_index_dict_list[ind][None]=int(li[2])
+            else:
+                onehot_index_dict_list[ind][li[1]]=int(li[2])
+        else:
+            if li[1]=='other':
+                onehot_index_dict_list[ind]['other']=int(li[2])
+            elif li[1]=='None':
+                onehot_index_dict_list[ind][None]=int(li[2])
+            else:
+                onehot_index_dict_list[ind][int(li[1])]=int(li[2])
+    elif ind ==107:
+        busi_type_code_dict[li[1]]=int(li[2])
+    elif ind ==108:
+        user_multihot_keyword_dict[li[1]]=int(li[2])
+input_index.close()
+x_item_size=max_index
+item_07_size=len(busi_type_code_dict)
+item_08_size=len(user_multihot_keyword_dict)
+# debug
+# print busi_type_code_dict
+####################################################################
+
+
 # 95598 times for each user
 # 95598_times saved in user_info_list[0][1]
 
@@ -795,10 +848,10 @@ print "12 end"
 # user_info_list[9]:event_list_10
 # user_info_list[10]:event_list_12
 # 7
-busi_type_code_dict={}
+
 
 # 8
-user_multihot_keyword_dict={}
+
 max_onehot_index_for_08=0
 for user in cons_no_dict.values():
     if len(user[0]) == 0: user[0] = [None] * added_feature_no
@@ -835,18 +888,18 @@ for user in cons_no_dict.values():
     if len(user[4]) > 0:
         user_busi_type_code = {}
         for event in user[4]:
-            if event[2] not in busi_type_code_dict:
-                busi_type_code_dict[event[2]] = len(busi_type_code_dict) + 1
-                user_busi_type_code[event[2]] = [busi_type_code_dict[event[2]], 1]
-                continue
-            if event[2] not in user_busi_type_code:
-                user_busi_type_code[event[2]] = [busi_type_code_dict[event[2]], 1]
-                continue
-            user_busi_type_code[event[2]][1] += 1
+            if event[2] not in busi_type_code_dict.keys():event[2]='other'
+            if event[2] in busi_type_code_dict.keys():
+                if event[2] not in user_busi_type_code:
+                    user_busi_type_code[event[2]] = [busi_type_code_dict[event[2]], 1]
+                    continue
+                user_busi_type_code[event[2]][1] += 1
         user[0][7] = []
+        # print user_busi_type_code
         for pair in user_busi_type_code.values():
             # print pair
             user[0][7].append(pair)
+
     # 8
     ####
     max_onehot_index_for_08 = len(busi_type_code_dict)
@@ -864,15 +917,12 @@ for user in cons_no_dict.values():
                 lh = a.index('【')
                 rh = a.index('】')
                 keyword = (a[lh + len('【'):rh])
-
-                if keyword not in user_multihot_keyword_dict:
-                    user_multihot_keyword_dict[keyword] = len(user_multihot_keyword_dict) + 1
-                    user_multihot_keyword_pair_dict[keyword] = [user_multihot_keyword_dict[keyword], 1]
-                    continue
-                if keyword not in user_multihot_keyword_pair_dict:
-                    user_multihot_keyword_pair_dict[keyword] = [user_multihot_keyword_dict[keyword], 1]
-                    continue
-                user_multihot_keyword_pair_dict[keyword][1] += 1
+                if keyword not in user_multihot_keyword_dict.keys():keyword='other'
+                if keyword in user_multihot_keyword_dict.keys():
+                    if keyword not in user_multihot_keyword_pair_dict:
+                        user_multihot_keyword_pair_dict[keyword] = [user_multihot_keyword_dict[keyword], 1]
+                        continue
+                    user_multihot_keyword_pair_dict[keyword][1] += 1
         user[0][8] = []
 
         for pair in user_multihot_keyword_pair_dict.values():
@@ -881,41 +931,46 @@ for user in cons_no_dict.values():
 
 
 
-
-
-#######################################
-index=[0,3,4,8,9,10,11,13,15,16,17,18,19,20,21,22]
-input_index=open('../data/train/item_onehot_index_dict.txt',"r")
-#   user[13] [22] [12] are int
-#   other = -1
-onehot_index_dict_list=[None]*23
-for i in index:
-    onehot_index_dict_list[i]={}
-
-max_index=0
-for line in input_index:
-    line=line.strip('\n')
-    li = re.split(' ', line)
-    ind = int(li[0])
-    if int(li[2])>max_index:max_index=int(li[2])
-    if ind==13 or ind==22 or ind==12 or ind ==18 or ind ==3:
-        if li[1]=='other':
-            onehot_index_dict_list[ind]['other']=int(li[2])
-        elif li[1]=='None':
-            onehot_index_dict_list[ind][None]=int(li[2])
-        else:
-            onehot_index_dict_list[ind][li[1]]=int(li[2])
-    else:
-        if li[1]=='other':
-            onehot_index_dict_list[ind]['other']=int(li[2])
-        elif li[1]=='None':
-            onehot_index_dict_list[ind][None]=int(li[2])
-        else:
-            onehot_index_dict_list[ind][int(li[1])]=int(li[2])
-
-input_index.close()
-
-
+#
+# #######################################
+# index=[0,3,4,8,9,10,11,13,15,16,17,18,19,20,21,22]
+# input_index=open('../data/train/item_onehot_index_dict.txt',"r")
+# #   user[13] [22] [12] are int
+# #   other = -1
+# onehot_index_dict_list=[None]*23
+# for i in index:
+#     onehot_index_dict_list[i]={}
+# busi_type_code_dict={}
+# user_multihot_keyword_dict={}
+# max_index=0
+# for line in input_index:
+#     line=line.strip('\n')
+#     li = re.split(' ', line)
+#     ind = int(li[0])
+#     if int(li[2])>max_index:max_index=int(li[2])
+#     if ind in index:
+#         if ind==13 or ind==22 or ind==12 or ind ==18 or ind ==3:
+#             if li[1]=='other':
+#                 onehot_index_dict_list[ind]['other']=int(li[2])
+#             elif li[1]=='None':
+#                 onehot_index_dict_list[ind][None]=int(li[2])
+#             else:
+#                 onehot_index_dict_list[ind][li[1]]=int(li[2])
+#         else:
+#             if li[1]=='other':
+#                 onehot_index_dict_list[ind]['other']=int(li[2])
+#             elif li[1]=='None':
+#                 onehot_index_dict_list[ind][None]=int(li[2])
+#             else:
+#                 onehot_index_dict_list[ind][int(li[1])]=int(li[2])
+#     elif ind ==107:
+#         busi_type_code_dict[li[1]]=int(li[2])
+#     elif ind ==108:
+#         user_multihot_keyword_dict[li[1]]=int(li[2])
+# input_index.close()
+# x_item_size=max_index
+# item_07_size=len(busi_type_code_dict)
+# item_08_size=len(user_multihot_keyword_dict)
 
 # output_index=open('../data/test/test_user_onehot_index.txt',"w")
 # for user in cons_no_dict.values():
@@ -970,39 +1025,45 @@ while 1:
                 output_index.write(str(onehot_index_dict_list[i][user[1][i]]))
                 output_index.write(':1 ')
 
-        for j in range(1, 7):
-            if len(user[0]) > j:
-                if user[0][j] != None:
-                    if user[0][j] > 0:
-                        output_index.write(str(max_index + j))
-                        output_index.write(':')
-                        output_index.write(str(user[0][j]))
-                        output_index.write(' ')
         if user[0][7] != None:
+
             for pair in user[0][7]:
-                output_index.write(str(max_index + 6 + int(pair[0])))
+
+                # if pair
+                output_index.write(str(pair[0]))
                 output_index.write(':')
                 output_index.write(str(pair[1]))
                 output_index.write(' ')
 
         if user[0][8] != None:
             for pair in user[0][8]:
-                output_index.write(str(max_onehot_index_for_08 + max_index + 6 + int(pair[0])))
+
+                output_index.write(str(pair[0]))
                 output_index.write(':')
                 output_index.write(str(pair[1]))
                 output_index.write(' ')
 
+        for j in range(1, 7):
+            if len(user[0]) > j:
+                if user[0][j] != None:
+                    if user[0][j] > 0:
+                        output_index.write(str(x_item_size +item_07_size+ item_08_size+ j))
+                        output_index.write(':')
+                        output_index.write(str(user[0][j]))
+                        output_index.write(' ')
         output_index.write('\n')
 
     output_index.write('0 ')
-    output_index.write(str(max_index + 7))
+    output_index.write(str(x_item_size +item_07_size+ item_08_size+7))
     output_index.write(':0')
     output_index.write('\n')
 
 input.close()
 output_index.close()
 
-
+print x_item_size
+print item_07_size
+print item_08_size
 
 
 

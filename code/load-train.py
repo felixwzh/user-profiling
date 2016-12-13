@@ -762,10 +762,11 @@ for user in cons_no_dict.values():
                     user_multihot_keyword_pair_dict[keyword]=[user_multihot_keyword_dict[keyword],1]
                     continue
                 user_multihot_keyword_pair_dict[keyword][1]+=1
+
         user[0][8]=[]
         for pair in user_multihot_keyword_pair_dict.values():
             user[0][8].append(pair)
-
+        # print user[0][8]
 
 
 
@@ -798,6 +799,48 @@ for i in index:
         if (encode_item_list_list[i][values] + 1 + counter) > max_onehot_index:
             max_onehot_index = (encode_item_list_list[i][values] + 1 + counter)
     counter = item_size_list[i] + counter
+
+x_item_size=max_onehot_index
+##########
+#        #
+# 07 ------107
+for busi in busi_type_code_dict:
+    output_index.write('107 ')
+    output_index.write(str(busi))
+    output_index.write(' ')
+
+    output_index.write(str(busi_type_code_dict[busi]+max_onehot_index))
+    busi_type_code_dict[busi]+=max_onehot_index
+    output_index.write('\n')
+
+max_onehot_index=max_onehot_index+len(busi_type_code_dict)
+output_index.write('107 ')
+output_index.write('other')
+output_index.write(' ')
+output_index.write(str(1+max_onehot_index))
+output_index.write('\n')
+max_onehot_index+=1
+item_07_size=len(busi_type_code_dict)+1
+
+# 08--------108
+for keyword  in user_multihot_keyword_dict:
+    output_index.write('108 ')
+    output_index.write(keyword)
+    output_index.write(' ')
+    output_index.write(str(user_multihot_keyword_dict[keyword]+max_onehot_index))
+    user_multihot_keyword_dict[keyword]+=max_onehot_index
+    output_index.write('\n')
+
+max_onehot_index=max_onehot_index+len(user_multihot_keyword_dict)
+output_index.write('108 ')
+output_index.write('other')
+output_index.write(' ')
+output_index.write(str(1+max_onehot_index))
+output_index.write('\n')
+max_onehot_index+=1
+item_08_size=len(user_multihot_keyword_dict)+1
+#        #
+##########
 output_index.close()
 
 # 95598 times for each user
@@ -833,41 +876,38 @@ for user in cons_no_dict.values():
         if user[2][i] != 1:
             output_onehot.write(str(user[3][i]))
             output_onehot.write(":1 ")
-    for j in range(1, 7):
-        #(1,7) 7!
-        if len(user[0]) > j:
-            if user[0][j] != None:
-                if user[0][j] > 0:
-                    output_onehot.write(str(max_onehot_index + j))
-                    output_onehot.write(':')
-                    output_onehot.write(str(user[0][j]))
-                    output_onehot.write(' ')
-    #
 
     if user[0][7]!=None:
         for pair in user[0][7]:
-
-            output_onehot.write(str(max_onehot_index + 6+int(pair[0])))
+            output_onehot.write(str(int(pair[0])+x_item_size))
             output_onehot.write(':')
             output_onehot.write(str(pair[1]))
             output_onehot.write(' ')
 
     if user[0][8]!=None:
         for pair in user[0][8]:
-
-            output_onehot.write(str(max_onehot_index_for_08 + max_onehot_index + 6+int(pair[0])))
+            output_onehot.write(str(int(pair[0])+x_item_size+item_07_size))
             output_onehot.write(':')
             output_onehot.write(str(pair[1]))
             output_onehot.write(' ')
-            if (max_onehot_index_for_08 + max_onehot_index + 6+int(pair[0]))>maxmax:
-                maxmax=(max_onehot_index_for_08 + max_onehot_index + 6+int(pair[0]))
+        # if (max_onehot_index_for_08 + max_onehot_index + 6+int(pair[0]))>maxmax:
+        #     maxmax=(max_onehot_index_for_08 + max_onehot_index + 6+int(pair[0]))
 
+    for j in range(1, 7):
+        #(1,7) 7!
+        if len(user[0]) > j:
+            if user[0][j] != None:
+                if user[0][j] > 0:
+                    output_onehot.write(str(x_item_size+item_07_size+item_08_size + j))
+                    output_onehot.write(':')
+                    output_onehot.write(str(user[0][j]))
+                    output_onehot.write(' ')
+
+                    # end
+# print "output end"
 
     output_onehot.write('\n')
 
-output_onehot.close()
-# end
-# print "output end"
 #
 # fo=open("../data/test/test_to_predict.csv","w")
 # for user in cons_no_dict:
@@ -876,3 +916,7 @@ output_onehot.close()
 #
 #
 # fo.close()
+output_onehot.close()
+print x_item_size
+print item_07_size
+print item_08_size
