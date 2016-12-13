@@ -818,6 +818,9 @@ for line in input_index:
             for ii in range(2,len(li)-2):
                 li_1+=li[ii]
             li_2=li[len(li)-1]
+        else:
+            li_1=li[1]
+            li_2=li[2]
         print li
         print li[2]
         user_multihot_keyword_dict[li_1]=int(li_2)
