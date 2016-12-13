@@ -3,6 +3,15 @@
 from __future__ import division
 import re
 
+
+import hashlib
+def md5(str):
+    m = hashlib.md5()
+    m.update(str)
+    return m.hexdigest()
+
+
+
 def ints(x):
     try:
         y=int(x)
@@ -813,21 +822,22 @@ for line in input_index:
 
         busi_type_code_dict[li[1]]=int(li[2])
     elif ind ==108:
-        tmpno=len(user_multihot_keyword_dict)
-        if len(li)>3:
-            li_1=li[1]
-            for ii in range(2,len(li)-2):
-                li_1+=li[ii]
-                li_1+=' '
-            li_1+=li[len(li)-2]
-            li_2=li[len(li)-1]
-        else:
-            li_1=li[1]
-            li_2=li[2]
-        print li_1
-        user_multihot_keyword_dict[li_1]=int(li_2)
-        if tmpno==len(user_multihot_keyword_dict):
-            print 'did not add!'
+        # tmpno=len(user_multihot_keyword_dict)
+        # if len(li)>3:
+        #     li_1=li[1]
+        #     for ii in range(2,len(li)-2):
+        #         li_1+=li[ii]
+        #         li_1+=' '
+        #     li_1+=li[len(li)-2]
+        #     li_2=li[len(li)-1]
+        # else:
+        #     li_1=li[1]
+        #     li_2=li[2]
+        # print li_1
+        # user_multihot_keyword_dict[li_1]=int(li_2)
+        # if tmpno==len(user_multihot_keyword_dict):
+        #     print 'did not add!'
+        user_multihot_keyword_dict[li[1]] = int(li[2])
 input_index.close()
 x_item_size=max_index
 item_07_size=len(busi_type_code_dict)
@@ -934,14 +944,15 @@ for user in cons_no_dict.values():
             if a.find('【') != -1 and a.find('】') != -1:
                 lh = a.index('【')
                 rh = a.index('】')
-                keyword = (a[lh + len('【'):rh])
-                if keyword!='':
-                    if keyword not in user_multihot_keyword_dict.keys():keyword='other'
-                    if keyword in user_multihot_keyword_dict.keys():
-                        if keyword not in user_multihot_keyword_pair_dict:
-                            user_multihot_keyword_pair_dict[keyword] = [user_multihot_keyword_dict[keyword], 1]
-                            continue
-                        user_multihot_keyword_pair_dict[keyword][1] += 1
+                keyword_tmp = (a[lh + len('【'):rh])
+                keyword = md5(keyword_tmp)
+
+                if keyword not in user_multihot_keyword_dict.keys():keyword='other'
+                if keyword in user_multihot_keyword_dict.keys():
+                    if keyword not in user_multihot_keyword_pair_dict:
+                        user_multihot_keyword_pair_dict[keyword] = [user_multihot_keyword_dict[keyword], 1]
+                        continue
+                    user_multihot_keyword_pair_dict[keyword][1] += 1
         user[0][8] = []
 
         for pair in user_multihot_keyword_pair_dict.values():

@@ -2,7 +2,12 @@
 #-*- coding: utf-8 -*-
 from __future__ import division
 import re
-import codecs
+
+import hashlib
+def md5(str):
+    m = hashlib.md5()
+    m.update(str)
+    return m.hexdigest()
 
 def ints(x):
     try:
@@ -10,6 +15,7 @@ def ints(x):
         return y
     except ValueError:
         return None
+
 
 
 # data structure
@@ -752,17 +758,17 @@ for user in cons_no_dict.values():
             if a.find('【') != -1 and a.find('】') != -1:
                 lh = a.index('【')
                 rh = a.index('】')
-                keyword = (a[lh + len('【'):rh])
-                if keyword!='':
+                keyword_tmp = (a[lh + len('【'):rh])
+                keyword=md5(keyword_tmp)
 
-                    if keyword not in user_multihot_keyword_dict:
-                        user_multihot_keyword_dict[keyword]=len(user_multihot_keyword_dict)+1
-                        user_multihot_keyword_pair_dict[keyword]=[user_multihot_keyword_dict[keyword],1]
-                        continue
-                    if keyword not in user_multihot_keyword_pair_dict:
-                        user_multihot_keyword_pair_dict[keyword]=[user_multihot_keyword_dict[keyword],1]
-                        continue
-                    user_multihot_keyword_pair_dict[keyword][1]+=1
+                if keyword not in user_multihot_keyword_dict:
+                    user_multihot_keyword_dict[keyword]=len(user_multihot_keyword_dict)+1
+                    user_multihot_keyword_pair_dict[keyword]=[user_multihot_keyword_dict[keyword],1]
+                    continue
+                if keyword not in user_multihot_keyword_pair_dict:
+                    user_multihot_keyword_pair_dict[keyword]=[user_multihot_keyword_dict[keyword],1]
+                    continue
+                user_multihot_keyword_pair_dict[keyword][1]+=1
 
         user[0][8]=[]
         for pair in user_multihot_keyword_pair_dict.values():
