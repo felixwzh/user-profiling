@@ -817,7 +817,6 @@ for line in input_index:
         for ii in range(2,len(li)-2):
             li_1+=li[ii]
         li_2=li[len(li)-1]
-
         print li
         print li[2]
         user_multihot_keyword_dict[li_1]=int(li_2)
@@ -825,6 +824,11 @@ input_index.close()
 x_item_size=max_index
 item_07_size=len(busi_type_code_dict)
 item_08_size=len(user_multihot_keyword_dict)
+
+print x_item_size
+print item_07_size
+print item_08_size
+
 # debug
 # print busi_type_code_dict
 ####################################################################
@@ -937,6 +941,9 @@ for user in cons_no_dict.values():
         for pair in user_multihot_keyword_pair_dict.values():
             user[0][8].append(pair)
 
+print x_item_size
+print item_07_size
+print item_08_size
 
 
 
@@ -1073,7 +1080,7 @@ output_index.close()
 print x_item_size
 print item_07_size
 print item_08_size
-
+print x_item_size +item_07_size+ item_08_size+7
 
 
 
