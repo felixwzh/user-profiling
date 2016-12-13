@@ -817,6 +817,8 @@ for line in input_index:
         for ii in range(0,len(li)):
             if li[ii]!='':tmp_li.append(li[ii])
         li=tmp_li
+        print li
+        print li[2]
         user_multihot_keyword_dict[li[1]]=int(li[2])
 input_index.close()
 x_item_size=max_index
