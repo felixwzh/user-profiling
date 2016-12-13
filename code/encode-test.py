@@ -816,8 +816,10 @@ for line in input_index:
         tmpno=len(user_multihot_keyword_dict)
         if len(li)>3:
             li_1=li[1]
-            for ii in range(2,len(li)-2):
+            for ii in range(2,len(li)-3):
                 li_1+=li[ii]
+                li_1+=' '
+            li_1+=li[len(li)-2]
             li_2=li[len(li)-1]
         else:
             li_1=li[1]
