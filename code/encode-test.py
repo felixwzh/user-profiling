@@ -813,7 +813,8 @@ for line in input_index:
 
         busi_type_code_dict[li[1]]=int(li[2])
     elif ind ==108:
-        if len(li)!=3:
+        tmpno=len(user_multihot_keyword_dict)
+        if len(li)>3:
             li_1=li[1]
             for ii in range(2,len(li)-2):
                 li_1+=li[ii]
@@ -821,9 +822,10 @@ for line in input_index:
         else:
             li_1=li[1]
             li_2=li[2]
-        print li
-        print li[2]
+        print li_1
         user_multihot_keyword_dict[li_1]=int(li_2)
+        if tmpno==len(user_multihot_keyword_dict):
+            print 'did not add!'
 input_index.close()
 x_item_size=max_index
 item_07_size=len(busi_type_code_dict)
@@ -1079,7 +1081,7 @@ output_index.close()
 print x_item_size
 print item_07_size
 print item_08_size
-print x_item_size +item_07_size+ item_08_size+7
+print x_item_size +item_07_size+ item_08_size+6
 
 
 
