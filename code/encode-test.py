@@ -810,9 +810,10 @@ for line in input_index:
             else:
                 onehot_index_dict_list[ind][int(li[1])]=int(li[2])
     elif ind ==107:
-        print li[2]
+
         busi_type_code_dict[li[1]]=int(li[2])
     elif ind ==108:
+        print li[2]
         user_multihot_keyword_dict[li[1]]=int(li[2])
 input_index.close()
 x_item_size=max_index
