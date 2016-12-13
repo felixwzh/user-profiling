@@ -939,7 +939,7 @@ for user in cons_no_dict.values():
 
         for pair in user_multihot_keyword_pair_dict.values():
             user[0][8].append(pair)
-、
+
 
 
 
