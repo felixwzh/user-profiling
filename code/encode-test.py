@@ -813,7 +813,9 @@ for line in input_index:
 
         busi_type_code_dict[li[1]]=int(li[2])
     elif ind ==108:
-        print li[2]
+        print li
+        for ii in range(0,len(li)):
+            print li[ii]
         user_multihot_keyword_dict[li[1]]=int(li[2])
 input_index.close()
 x_item_size=max_index
