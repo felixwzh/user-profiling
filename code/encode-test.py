@@ -1084,7 +1084,7 @@ while 1:
         output_index.write('\n')
 
     output_index.write('0 ')
-    output_index.write(str(x_item_size +item_07_size+ item_08_size+7))
+    output_index.write(str(x_item_size +item_07_size+ item_08_size+6))
     output_index.write(':0')
     output_index.write('\n')
 
