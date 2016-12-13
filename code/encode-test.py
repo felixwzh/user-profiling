@@ -813,13 +813,14 @@ for line in input_index:
 
         busi_type_code_dict[li[1]]=int(li[2])
     elif ind ==108:
-        tmp_li=[]
-        for ii in range(0,len(li)):
-            if li[ii]!='':tmp_li.append(li[ii])
-        li=tmp_li
+        li_1=li[1]
+        for ii in range(2,len(li)-2):
+            li_1+=li[ii]
+        li_2=li[len(li)-1]
+
         print li
         print li[2]
-        user_multihot_keyword_dict[li[1]]=int(li[2])
+        user_multihot_keyword_dict[li_1]=int(li_2)
 input_index.close()
 x_item_size=max_index
 item_07_size=len(busi_type_code_dict)
